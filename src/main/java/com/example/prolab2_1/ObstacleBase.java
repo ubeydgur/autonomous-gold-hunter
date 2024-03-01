@@ -8,8 +8,6 @@ import java.io.InputStream;
 public class ObstacleBase {
     protected int sizeX;
     protected int sizeY;
-    protected int coordX;
-    protected int coordY;
     protected Image image;
     protected InputStream imagePath;
     protected ImageView imageView;
