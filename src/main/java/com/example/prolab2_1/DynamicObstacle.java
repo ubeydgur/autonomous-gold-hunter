@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class DynamicObstacle extends ObstacleBase{
+    private TranslateTransition translateObstacle = new TranslateTransition();
     private String species;
     enum DynamicObstacles {
         Bee,
@@ -23,5 +24,22 @@ public class DynamicObstacle extends ObstacleBase{
         imageView = new ImageView(image);
         imageView.setFitHeight(2 * 10);
         imageView.setFitWidth(2 * 10);
+
+        if (species == "Bee"){
+            translateObstacle.setNode(imageView);
+            translateObstacle.setDuration(Duration.millis(1000));
+            translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
+            translateObstacle.setByX(30);
+            translateObstacle.setAutoReverse(true);
+            translateObstacle.play();
+        }
+        else {
+            translateObstacle.setNode(imageView);
+            translateObstacle.setDuration(Duration.millis(1000));
+            translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
+            translateObstacle.setByY(50);
+            translateObstacle.setAutoReverse(true);
+            translateObstacle.play();
+        }
     }
 }
