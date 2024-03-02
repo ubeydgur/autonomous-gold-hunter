@@ -1,9 +1,6 @@
 package com.example.prolab2_1;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
 public class ObstacleGenerator {
     public StaticObstacle generateSummerObstacle(StaticObstacle.SummerObstacles summerObstacle) throws FileNotFoundException
@@ -53,9 +50,9 @@ public class ObstacleGenerator {
     public DynamicObstacle generateDynamicObstacle (DynamicObstacle.DynamicObstacles dynamicObstacle) throws FileNotFoundException {
         switch (dynamicObstacle){
             case Bee:
-                return new DynamicObstacle("pictures/tree_winter_2x2.png");
+                return new DynamicObstacle("pictures/bee.png", "Bee", 3, 2);
             case Bird:
-                return new DynamicObstacle("pictures/tree_summer_2x2.png");
+                return new DynamicObstacle("pictures/bird.png", "Bird", 2, 5);
         }
         return null;
     }
