@@ -29,7 +29,7 @@ public class DynamicObstacle extends ObstacleBase{
             translateObstacle.setNode(imageView);
             translateObstacle.setDuration(Duration.millis(1000));
             translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
-            translateObstacle.setByX(30);
+            translateObstacle.setByX(10);
             translateObstacle.setAutoReverse(true);
             translateObstacle.play();
         }
@@ -37,7 +37,7 @@ public class DynamicObstacle extends ObstacleBase{
             translateObstacle.setNode(imageView);
             translateObstacle.setDuration(Duration.millis(1000));
             translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
-            translateObstacle.setByY(50);
+            translateObstacle.setByY(30);
             translateObstacle.setAutoReverse(true);
             translateObstacle.play();
         }
