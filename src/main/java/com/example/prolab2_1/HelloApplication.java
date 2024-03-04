@@ -1,21 +1,13 @@
 package com.example.prolab2_1;
 
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -55,7 +47,10 @@ public class HelloApplication extends Application {
             for (double x = 0; x < 1000; x+=rectangleSize + gapSize) {
                 InfoRect infoRect = new InfoRect();
                 infoRect.rectangle = new Rectangle(x, y, rectangleSize, rectangleSize);
-                infoRect.rectangle.setFill(Color.WHITE);
+                if (x > 490)
+                    infoRect.rectangle.setFill(Color.LIGHTGREEN);
+                else
+                    infoRect.rectangle.setFill(Color.WHITE);
                 rectangleArray.add(infoRect);
             }
         }
@@ -118,14 +113,14 @@ public class HelloApplication extends Application {
         // Coordinate of Static Obstacles
         for (int k = 0; k < staticObstacles.size(); k++) {
             search:
-            for (int m = 0; m <1; m++) {
+            for (int m = 0; m < 1; m++) {
                 imageY = random.nextInt(99 - staticObstacles.get(k).sizeY);
                 if (staticObstacles.get(k).getSeason() == "summer")
                     imageX = random.nextInt(49 - staticObstacles.get(k).sizeX) + 50;
                 else
                     imageX = random.nextInt(49 - staticObstacles.get(k).sizeX);
-                for (int y = 0; y < staticObstacles.get(k).sizeY; y++) {
-                    for (int x = 0; x < staticObstacles.get(k).sizeX; x++) {
+                for (int y = 0; y < staticObstacles.get(k).sizeY + 2; y++) {
+                    for (int x = 0; x < staticObstacles.get(k).sizeX + 2; x++) {
                         index = (imageX + x) + ((imageY + y) * 100);
                         if (rectangleArray.get(index).isAvailable) {
                             infoRects.add(rectangleArray.get(index));
@@ -142,8 +137,8 @@ public class HelloApplication extends Application {
             for (int i = 0; i < infoRects.size(); i++)
                 infoRects.get(i).isAvailable = false;
 
-            staticObstacles.get(k).imageView.setX(infoRects.get(0).rectangle.getX());
-            staticObstacles.get(k).imageView.setY(infoRects.get(0).rectangle.getY());
+            staticObstacles.get(k).imageView.setX(infoRects.get(staticObstacles.get(k).sizeX + 3).rectangle.getX());
+            staticObstacles.get(k).imageView.setY(infoRects.get(staticObstacles.get(k).sizeX + 3).rectangle.getY());
             infoRects.clear();
         }
 
