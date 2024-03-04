@@ -8,13 +8,15 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+enum DynamicObstacles {
+    BEE,
+    BIRD
+}
+
 public class DynamicObstacle extends ObstacleBase{
     private TranslateTransition translateObstacle = new TranslateTransition();
     private String species;
-    enum DynamicObstacles {
-        Bee,
-        Bird
-    }
+
     DynamicObstacle (String imagePath, String species, int sizeX, int sizeY) throws FileNotFoundException {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
