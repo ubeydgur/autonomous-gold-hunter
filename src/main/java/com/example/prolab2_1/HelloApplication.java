@@ -26,8 +26,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        int windowHeight;
-        int windowWidth;
+        int windowHeight = 1000;
+        int windowWidth = 1000;
         double rectangleSize = 9.5;
         double gapSize = 0.5;
 
@@ -37,14 +37,14 @@ public class HelloApplication extends Application {
         System.out.println("Enter Window Width: ");
         windowWidth = scanner.nextInt();*/
 
-        double rectAmountOnX = 1000 / (rectangleSize + gapSize);
-        double rectAmountOnY = 1000 / (rectangleSize + gapSize);
+        double rectAmountOnX = windowHeight / (rectangleSize + gapSize);
+        double rectAmountOnY = windowWidth / (rectangleSize + gapSize);
         double rectTotal = rectAmountOnX * rectAmountOnY;
 
 
         // Creating Ractangles
-        for (double y = 0; y < 1000; y+=rectangleSize + gapSize) {
-            for (double x = 0; x < 1000; x+=rectangleSize + gapSize) {
+        for (double y = 0; y < windowHeight; y+=rectangleSize + gapSize) {
+            for (double x = 0; x < windowWidth; x+=rectangleSize + gapSize) {
                 InfoRect infoRect = new InfoRect();
                 infoRect.rectangle = new Rectangle(x, y, rectangleSize, rectangleSize);
                 if (x > 490)
@@ -203,6 +203,7 @@ public class HelloApplication extends Application {
             treasures.get(k).imageView.setY(infoRects.get(0).rectangle.getY());
             infoRects.clear();
         }
+        
 
         // Add Obstacles, Treasures and Rectangles to Screen
         Group myGroup = new Group();
@@ -219,7 +220,7 @@ public class HelloApplication extends Application {
         for (int i = 0; i < treasures.size(); i++)
             myGroup.getChildren().add(treasures.get(i).imageView);
         
-        Scene scene = new Scene(myGroup,1000,1000/*windowWidth,windowHeight*/);
+        Scene scene = new Scene(myGroup,windowWidth,windowHeight);
         scene.setFill(Color.BLACK);
         stage.setTitle("GOLDEN HUNTER");
         stage.setScene(scene);
