@@ -56,15 +56,15 @@ public class HelloApplication extends Application {
         }
 
 
-        // Creating Obstacles and Treasures
-        ArrayList<StaticObstacle.SummerObstacles> summerObstacle = new ArrayList<>();
-        summerObstacle.addAll(Arrays.asList(StaticObstacle.SummerObstacles.values()));
+        // Create Obstacles and Treasures
+        ArrayList<SummerObstacles> summerObstacle = new ArrayList<>();
+        summerObstacle.addAll(Arrays.asList(SummerObstacles.values()));
 
-        ArrayList<StaticObstacle.WinterObstacles> winterObstacle = new ArrayList<>();
-        winterObstacle.addAll(Arrays.asList(StaticObstacle.WinterObstacles.values()));
+        ArrayList<WinterObstacles> winterObstacle = new ArrayList<>();
+        winterObstacle.addAll(Arrays.asList(WinterObstacles.values()));
 
-        ArrayList<DynamicObstacle.DynamicObstacles> dynamicObstacle = new ArrayList<>();
-        dynamicObstacle.addAll(Arrays.asList(DynamicObstacle.DynamicObstacles.values()));
+        ArrayList<DynamicObstacles> dynamicObstacle = new ArrayList<>();
+        dynamicObstacle.addAll(Arrays.asList(DynamicObstacles.values()));
 
         ArrayList<StaticObstacle> staticObstacles = new ArrayList<>();
         ArrayList<DynamicObstacle> dynamicObstacles = new ArrayList<>();
@@ -104,13 +104,13 @@ public class HelloApplication extends Application {
             treasures.add(treasureGenerator.copperChest());
         }
 
-        // Coordinates of Treasures and Obstacles
+        // Set Coordinates of Treasures and Obstacles
         ArrayList<InfoRect> infoRects = new ArrayList<>();
         int imageX;
         int imageY;
         int index;
 
-        // Coordinate of Static Obstacles
+        // Set Coordinates of Static Obstacles
         for (int k = 0; k < staticObstacles.size(); k++) {
             search:
             for (int m = 0; m < 1; m++) {
@@ -142,7 +142,7 @@ public class HelloApplication extends Application {
             infoRects.clear();
         }
 
-        // Coordinate of Dynamic Obstacles
+        // Set Coordinates of Dynamic Obstacles
         for (int k = 0; k < dynamicObstacles.size(); k++) {
             search:
             for (int m = 0; m < 1; m++) {
@@ -174,7 +174,7 @@ public class HelloApplication extends Application {
             infoRects.clear();
         }
 
-        // Coordinate of Treasures
+        // Set Coordinates of Treasures
         for (int k = 0; k < treasures.size(); k++) {
             search:
             for (int m = 0; m < 1; m++) {
@@ -203,9 +203,9 @@ public class HelloApplication extends Application {
             treasures.get(k).imageView.setY(infoRects.get(0).rectangle.getY());
             infoRects.clear();
         }
-        
 
-        // Add Obstacles, Treasures and Rectangles to Screen
+
+        // Add Obstacles, Treasures, Rectangles and Character to Screen
         Group myGroup = new Group();
 
         for (int i = 0; i < rectTotal; i++)
@@ -219,6 +219,7 @@ public class HelloApplication extends Application {
 
         for (int i = 0; i < treasures.size(); i++)
             myGroup.getChildren().add(treasures.get(i).imageView);
+        
         
         Scene scene = new Scene(myGroup,windowWidth,windowHeight);
         scene.setFill(Color.BLACK);
