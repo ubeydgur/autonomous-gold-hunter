@@ -30,6 +30,9 @@ public class HelloApplication extends Application {
         int windowWidth = 1000;
         double rectangleSize = 9.5;
         double gapSize = 0.5;
+        int characterSizeX = 2;
+        int characterSizeY = 2;
+
 
         /*System.out.println("Enter Window Height: ");
         Scanner scanner = new Scanner(System.in);
@@ -204,6 +207,22 @@ public class HelloApplication extends Application {
             infoRects.clear();
         }
 
+        // Create Character Object
+        Character arthurMorgan = null;
+        boolean isCharacterCreated = false;
+        int characterX;
+        int characterY;
+
+        while (!isCharacterCreated) {
+            characterX = random.nextInt(99 - characterSizeX);
+            characterY = random.nextInt(99 - characterSizeY);
+
+            if (rectangleArray.get(characterX + characterY * 100).isAvailable){
+                arthurMorgan = new Character("pictures/bee.png", characterX, characterY, characterSizeX, characterSizeY);
+                isCharacterCreated = true;
+            }
+        }
+
 
         // Add Obstacles, Treasures, Rectangles and Character to Screen
         Group myGroup = new Group();
@@ -219,8 +238,10 @@ public class HelloApplication extends Application {
 
         for (int i = 0; i < treasures.size(); i++)
             myGroup.getChildren().add(treasures.get(i).imageView);
-        
-        
+
+        myGroup.getChildren().add(arthurMorgan.imageView);
+
+
         Scene scene = new Scene(myGroup,windowWidth,windowHeight);
         scene.setFill(Color.BLACK);
         stage.setTitle("GOLDEN HUNTER");
