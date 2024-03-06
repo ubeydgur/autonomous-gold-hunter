@@ -14,10 +14,10 @@ enum DynamicObstacles {
 }
 
 public class DynamicObstacle extends ObstacleBase{
+    Enum species;
     private TranslateTransition translateObstacle = new TranslateTransition();
-    private String species;
 
-    DynamicObstacle (String imagePath, String species, int sizeX, int sizeY) throws FileNotFoundException {
+    DynamicObstacle (String imagePath, int sizeX, int sizeY, Enum species) throws FileNotFoundException {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.species = species;
@@ -26,22 +26,16 @@ public class DynamicObstacle extends ObstacleBase{
         imageView = new ImageView(image);
         imageView.setFitHeight(2 * 10);
         imageView.setFitWidth(2 * 10);
+        translateObstacle.setNode(imageView);
+        translateObstacle.setDuration(Duration.millis(1000));
+        translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
+        translateObstacle.setAutoReverse(true);
 
-        if (species == "Bee"){
-            translateObstacle.setNode(imageView);
-            translateObstacle.setDuration(Duration.millis(1000));
-            translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
+        if (species == DynamicObstacles.BEE)
             translateObstacle.setByX(10);
-            translateObstacle.setAutoReverse(true);
-            translateObstacle.play();
-        }
-        else {
-            translateObstacle.setNode(imageView);
-            translateObstacle.setDuration(Duration.millis(1000));
-            translateObstacle.setCycleCount(TranslateTransition.INDEFINITE);
+        else
             translateObstacle.setByY(30);
-            translateObstacle.setAutoReverse(true);
-            translateObstacle.play();
-        }
+
+        translateObstacle.play();
     }
 }
