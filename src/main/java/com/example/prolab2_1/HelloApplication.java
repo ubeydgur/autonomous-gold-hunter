@@ -222,6 +222,8 @@ public class HelloApplication extends Application {
             }
         }
 
+        arthurMorgan.move();
+        arthurMorgan.updateMovement(staticObstacles);
 
         // Add Obstacles, Treasures, Rectangles and Character to Screen
         Group myGroup = new Group();
