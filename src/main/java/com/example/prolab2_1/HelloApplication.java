@@ -22,8 +22,6 @@ public class HelloApplication extends Application {
     ArrayList<InfoRect> rectangleArray = new ArrayList<>();
     Random random = new Random();
 
-
-
     @Override
     public void start(Stage stage) throws IOException {
         int windowHeight = 1000;
@@ -60,11 +58,8 @@ public class HelloApplication extends Application {
 
 
         // Create Obstacles and Treasures
-        ArrayList<SummerObstacles> summerObstacle = new ArrayList<>();
-        summerObstacle.addAll(Arrays.asList(SummerObstacles.values()));
-
-        ArrayList<WinterObstacles> winterObstacle = new ArrayList<>();
-        winterObstacle.addAll(Arrays.asList(WinterObstacles.values()));
+        ArrayList<TypeObstacles> typeObstacle = new ArrayList<>();
+        typeObstacle.addAll(Arrays.asList(TypeObstacles.values()));
 
         ArrayList<DynamicObstacles> dynamicObstacle = new ArrayList<>();
         dynamicObstacle.addAll(Arrays.asList(DynamicObstacles.values()));
@@ -80,17 +75,21 @@ public class HelloApplication extends Application {
         int totalTreasure = 5;
         int randomObstacleIndex;
         int randomSeason;
+        int staticObstacleSize;
 
-        for (int i = 0; i < totalStaticObstacle; i++) {
+        obstacleGenerator.createDefaultObstacles(staticObstacles);
+        staticObstacleSize = staticObstacles.size();
+
+        for (int i = 0; i < totalStaticObstacle - staticObstacleSize; i++) {
             randomSeason = random.nextInt(2);
             switch (randomSeason){
                 case 0:
-                    randomObstacleIndex = random.nextInt(winterObstacle.size());
-                    staticObstacles.add(obstacleGenerator.generateWinterObstacle(winterObstacle.get(randomObstacleIndex)));
+                    randomObstacleIndex = random.nextInt(typeObstacle.size());
+                    staticObstacles.add(obstacleGenerator.generateWinterObstacle(typeObstacle.get(randomObstacleIndex)));
                     break;
                 case 1:
-                    randomObstacleIndex = random.nextInt(summerObstacle.size());
-                    staticObstacles.add(obstacleGenerator.generateSummerObstacle(summerObstacle.get(randomObstacleIndex)));
+                    randomObstacleIndex = random.nextInt(typeObstacle.size());
+                    staticObstacles.add(obstacleGenerator.generateSummerObstacle(typeObstacle.get(randomObstacleIndex)));
                     break;
             }
         }
