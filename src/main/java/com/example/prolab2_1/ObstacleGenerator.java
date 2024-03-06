@@ -11,7 +11,7 @@ public class ObstacleGenerator {
     RockObstacles[] rockObstacles = RockObstacles.values();
 
     // Create Two Times From Whole Obstacles
-    public void hello(ArrayList<StaticObstacle> staticObstacles) throws FileNotFoundException {
+    public void createDefaultObstacles(ArrayList<StaticObstacle> staticObstacles) throws FileNotFoundException {
         for (int i = 0; i < 2; i++) {
             for (TypeObstacles typeObstacles : TypeObstacles.values()) {
                 staticObstacles.add(generateSummerObstacle(typeObstacles));
