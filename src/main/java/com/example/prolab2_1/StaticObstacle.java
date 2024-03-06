@@ -6,25 +6,23 @@ import javafx.scene.image.ImageView;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-enum SummerObstacles {
-    TREE2X2,
-    TREE3X3,
-    TREE4X4,
-    TREE5X5,
-    ROCK2X2,
-    ROCK3X3,
+enum TypeObstacles {
+    TREE,
+    ROCK,
     WALL,
     MOUNTAIN
 }
-enum WinterObstacles {
+
+enum TreeObstacles {
     TREE2X2,
     TREE3X3,
     TREE4X4,
-    TREE5X5,
+    TREE5X5
+}
+
+enum RockObstacles {
     ROCK2X2,
-    ROCK3X3,
-    WALL,
-    MOUNTAIN
+    ROCK3X3
 }
 
 public class StaticObstacle extends ObstacleBase{
