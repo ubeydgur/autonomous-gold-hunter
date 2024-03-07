@@ -7,16 +7,23 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+enum TreasureType {
+    GOLD,
+    SILVER,
+    EMERALD,
+    COPPER
+}
+
 public class Treasure {
-    private String type;
+    private Enum treasureType;
     protected int sizeX;
     protected int sizeY;
     protected Image image;
     protected InputStream imagePath;
     protected ImageView imageView;
 
-    Treasure(String type, String imagePath) throws FileNotFoundException {
-        this.type = type;
+    Treasure(String imagePath, Enum treasureType) throws FileNotFoundException {
+        this.treasureType = treasureType;
         this.imagePath = new FileInputStream(imagePath);
         sizeX = 3;
         sizeY = 3;
