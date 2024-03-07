@@ -1,11 +1,16 @@
 package com.example.prolab2_1;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,22 +21,22 @@ import java.util.Scanner;
 class InfoRect {
     Rectangle rectangle;
     boolean isAvailable = true;
+    boolean isSeen = false;
 }
 
 public class HelloApplication extends Application {
     ArrayList<InfoRect> rectangleArray = new ArrayList<>();
     Random random = new Random();
+    Character arthurMorgan = null;
+    int windowHeight = 1000;
+    int windowWidth = 1000;
+    double rectangleSize = 9.5;
+    double gapSize = 0.5;
+    int characterSizeX = 1;
+    int characterSizeY = 1;
 
     @Override
     public void start(Stage stage) throws IOException {
-        int windowHeight = 1000;
-        int windowWidth = 1000;
-        double rectangleSize = 9.5;
-        double gapSize = 0.5;
-        int characterSizeX = 2;
-        int characterSizeY = 2;
-
-
         /*System.out.println("Enter Window Height: ");
         Scanner scanner = new Scanner(System.in);
         windowHeight = scanner.nextInt();
@@ -49,7 +54,7 @@ public class HelloApplication extends Application {
                 InfoRect infoRect = new InfoRect();
                 infoRect.rectangle = new Rectangle(x, y, rectangleSize, rectangleSize);
                 if (x > 490)
-                    infoRect.rectangle.setFill(Color.LIGHTGREEN);
+                    infoRect.rectangle.setFill(Color.WHITE);
                 else
                     infoRect.rectangle.setFill(Color.WHITE);
                 rectangleArray.add(infoRect);
@@ -207,23 +212,26 @@ public class HelloApplication extends Application {
         }
 
         // Create Character Object
-        Character arthurMorgan = null;
         boolean isCharacterCreated = false;
-        int characterX;
-        int characterY;
+        int locationX;
+        int locationY;
 
         while (!isCharacterCreated) {
-            characterX = random.nextInt(99 - characterSizeX);
-            characterY = random.nextInt(99 - characterSizeY);
+            locationX = random.nextInt(99 - characterSizeX);
+            locationY = random.nextInt(99 - characterSizeY);
 
-            if (rectangleArray.get(characterX + characterY * 100).isAvailable){
-                arthurMorgan = new Character("pictures/bee.png", characterX, characterY, characterSizeX, characterSizeY);
+            if (rectangleArray.get(locationX + locationY  * 100).isAvailable){
+                arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY);
+                arthurMorgan.currentRectangleIndex = locationX + locationY * 100;
                 isCharacterCreated = true;
             }
         }
 
-        arthurMorgan.move();
-        arthurMorgan.updateMovement(staticObstacles);
+        arthurMorgan.specifyDirectionRandomly();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick()));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
 
         // Add Obstacles, Treasures, Rectangles and Character to Screen
         Group myGroup = new Group();
@@ -245,10 +253,16 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(myGroup,windowWidth,windowHeight);
         scene.setFill(Color.BLACK);
-        stage.setTitle("GOLDEN HUNTER");
+        stage.setTitle("AUTONOMOUS GOLD HUNTER");
         stage.setScene(scene);
         stage.show();
     }
+
+    public void tick(){
+        arthurMorgan.move(windowWidth,windowHeight);
+        arthurMorgan.shouldCheckAround(windowWidth, rectangleSize, gapSize, rectangleArray);
+    }
+
 
     public static void main(String[] args) {
         launch();
