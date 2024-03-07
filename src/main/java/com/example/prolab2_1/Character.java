@@ -1,16 +1,14 @@
 package com.example.prolab2_1;
 import javafx.animation.TranslateTransition;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
+import javafx.scene.paint.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.Math;
 
 enum MotionDirection{
     RIGHT,
@@ -20,10 +18,13 @@ enum MotionDirection{
 }
 
 public class Character {
+    int lastLocationX;
+    int lastLocationY;
     int locationX;
     int locationY;
     int characterSizeX;
     int characterSizeY;
+    int currentRectangleIndex;
     InputStream imagePath;
     ImageView imageView;
     Image image;
@@ -36,82 +37,74 @@ public class Character {
     public Character(String imagePath, int locationX, int locationY, int characterSizeX, int characterSizeY) throws FileNotFoundException {
         this.locationX = locationX;
         this.locationY = locationY;
-        this.characterSizeX = characterSizeX;
-        this.characterSizeY = characterSizeY;
+        this.lastLocationX = locationX * 10;
+        this.lastLocationY = locationY * 10;
+        this.characterSizeX = characterSizeX * 10;
+        this.characterSizeY = characterSizeY * 10;
         this.imagePath = new FileInputStream(imagePath);
         image = new Image(this.imagePath);
         imageView = new ImageView(image);
         imageView.setX(locationX * 10);
         imageView.setY(locationY * 10);
-        imageView.setFitHeight(characterSizeY * 10);
-        imageView.setFitWidth(characterSizeX * 10);
+        imageView.setFitHeight(this.characterSizeY);
+        imageView.setFitWidth(this.characterSizeX);
     }
 
-    public MotionDirection specifyDirectionRandomly()
-    {
+    public void specifyDirectionRandomly() {
         Random random = new Random();
         int enumLength = MotionDirection.values().length;
         int directionIndex = random.nextInt(enumLength);
         direction = MotionDirection.values()[directionIndex];
-
-        return direction;
     }
 
-    public void move()
-    {
-        translateComponent.setNode(imageView);
-        translateComponent.setDuration(Duration.millis(10000));
+    public void move(int windowWidth, int windowHeight) {
+        if (imageView.getY() > 0 && direction == MotionDirection.UP)
+            imageView.setY(imageView.getY() - 0.5);
 
-        switch (specifyDirectionRandomly())
-        {
-            case UP:
-                translateComponent.setByY(-1000);
-                break;
-            case DOWN:
-                translateComponent.setByY(1000);
-                break;
-            case LEFT:
-                translateComponent.setByX(-1000);
-                break;
-            case RIGHT:
-                translateComponent.setByX(1000);
-                break;
-        }
+        else if (imageView.getY() < windowHeight - characterSizeY && direction == MotionDirection.DOWN)
+            imageView.setY(imageView.getY() + 0.5);
 
-        translateComponent.play();
-    }
+        else if (imageView.getX() > 0 && direction == MotionDirection.LEFT)
+            imageView.setX(imageView.getX() - 0.5);
 
-    public void clearSpeed()
-    {
-        translateComponent.stop();
-
-        if (direction == MotionDirection.UP || direction == MotionDirection.DOWN)
-        {
-            translateComponent.setByY(0);
-        }
+        else if (imageView.getX() < windowWidth - characterSizeX && direction == MotionDirection.RIGHT)
+            imageView.setX(imageView.getX() + 0.5);
 
         else
-        {
-            translateComponent.setByX(0);
-        }
+            specifyDirectionRandomly();
     }
 
-    public void updateMovement(ArrayList<StaticObstacle> staticObstacles)
-    {
-        final ChangeListener<Number> checkIntersection = (ob,n,n1)-> {
-            for (StaticObstacle obstacle : staticObstacles)
-            {
-                if (imageView.getBoundsInParent().intersects(obstacle.imageView.getBoundsInParent()) && intersectionController)
-                {
-                    intersectionController = false;
-                    clearSpeed();
-                    specifyDirectionRandomly();
-                    move();
-                }
-            }
-        };
+    public boolean shouldCheckAround(int windowWidth, double rectangleSize, double gapSize, ArrayList<InfoRect> rectArrayList) {
+        if (Math.abs(imageView.getY() - lastLocationY) >= (rectangleSize + gapSize)) {
+            lastLocationY = (int)imageView.getY();
 
-        imageView.translateXProperty().addListener(checkIntersection);
-        imageView.translateYProperty().addListener(checkIntersection);
+            switch (direction) {
+                case UP:
+                    currentRectangleIndex -= (windowWidth / (rectangleSize + gapSize));
+                    break;
+                case DOWN:
+                    currentRectangleIndex += (windowWidth / (rectangleSize + gapSize));
+                    break;
+            }
+
+            rectArrayList.get(currentRectangleIndex).rectangle.setFill(Color.RED);
+            return true;
+        }
+
+        else if (Math.abs(imageView.getX() - lastLocationX) >= (rectangleSize + gapSize)){
+            lastLocationX = (int)imageView.getX();
+            switch (direction) {
+                case RIGHT:
+                    currentRectangleIndex++;
+                    break;
+                case LEFT:
+                    currentRectangleIndex--;
+                    break;
+            }
+            rectArrayList.get(currentRectangleIndex).rectangle.setFill(Color.RED);
+            return true;
+        }
+
+        return false;
     }
 }
