@@ -1,5 +1,4 @@
 package com.example.prolab2_1;
-import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -29,10 +28,6 @@ public class Character {
     ImageView imageView;
     Image image;
     MotionDirection direction;
-    // It is for intersecting just one time. but never updating second time
-    boolean intersectionController = true;
-
-    private TranslateTransition translateComponent = new TranslateTransition();
 
     public Character(String imagePath, int locationX, int locationY, int characterSizeX, int characterSizeY) throws FileNotFoundException {
         this.locationX = locationX;
@@ -88,6 +83,7 @@ public class Character {
             }
 
             rectArrayList.get(currentRectangleIndex).rectangle.setFill(Color.RED);
+            checkDirectionsAvailable(windowWidth, rectArrayList);
             return true;
         }
 
@@ -101,10 +97,53 @@ public class Character {
                     currentRectangleIndex--;
                     break;
             }
+            checkDirectionsAvailable(windowWidth, rectArrayList);
             rectArrayList.get(currentRectangleIndex).rectangle.setFill(Color.RED);
             return true;
         }
 
         return false;
+    }
+
+
+
+    public void checkDirectionsAvailable(int windowWidth, ArrayList<InfoRect> infoRectList)
+    {
+        /*
+        * Left = -1 -2 -3
+        * Right = 1 2 3
+        * Up = -width -2width -3width
+        * Down = width 2width 3width
+        */
+
+        switch (direction) {
+            case UP:
+                for (int i = 1; i <= 3; i++) {
+                    if (!infoRectList.get(currentRectangleIndex - windowWidth / 10 * i).isPlayerMoved)
+                        specifyDirectionRandomly();
+                }
+                break;
+
+            case DOWN:
+                for (int i = 1; i <= 3; i++) {
+                    if (!infoRectList.get(currentRectangleIndex + windowWidth / 10 * i).isPlayerMoved)
+                        specifyDirectionRandomly();
+                }
+                break;
+
+            case LEFT:
+                for (int i = 1; i <= 3; i++) {
+                    if (!infoRectList.get(currentRectangleIndex - i).isPlayerMoved)
+                        specifyDirectionRandomly();
+                }
+                break;
+
+            case RIGHT:
+                for (int i = 1; i <= 3; i++) {
+                    if (!infoRectList.get(currentRectangleIndex + i).isPlayerMoved)
+                        specifyDirectionRandomly();
+                }
+                break;
+        }
     }
 }
