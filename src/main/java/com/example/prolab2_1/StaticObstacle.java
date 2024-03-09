@@ -44,4 +44,8 @@ public class StaticObstacle extends ObstacleBase{
     public String getSeason(){
         return season;
     }
+
+    public TypeObstacles getObstacleType() {
+        return obstacleType;
+    }
 }
