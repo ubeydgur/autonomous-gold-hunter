@@ -20,8 +20,8 @@ class RectangleInfo {
     Rectangle rectangle;
     boolean isObstaclePlaced = true;
     boolean isPlayerMoved = true;
-    TypeObstacles obstacleType;
     boolean isSeen = false;
+    Enum obstacleType;
 }
 
 public class HelloApplication extends Application {
@@ -80,7 +80,7 @@ public class HelloApplication extends Application {
 
         // Create Obstacles and Treasures
         int totalStaticObstacle = 20;
-        int totalDynamicObstacle = 3;
+        int totalDynamicObstacle = 10;
         int totalTreasure = 5;
         int randomSeason;
         int randomObstacle;
@@ -217,6 +217,7 @@ public class HelloApplication extends Application {
                 rectangleInfo.get(i).rectangle.setFill(Color.LIGHTPINK);
                 rectangleInfo.get(i).isObstaclePlaced = false;
                 rectangleInfo.get(i).isPlayerMoved = false;
+                rectangleInfo.get(i).obstacleType = dynamicObstacles.get(k).species;
             }
 
             dynamicObstacles.get(k).imageView.setX(rectangleInfo.get(0).rectangle.getX());
