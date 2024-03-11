@@ -20,6 +20,7 @@ class InfoRect {
     Rectangle rectangle;
     boolean isObstacleReplaced = true;
     boolean isPlayerMoved = true;
+    TypeObstacles obstacleType;
     boolean isSeen = false;
 }
 
@@ -161,6 +162,7 @@ public class HelloApplication extends Application {
                 infoRects.get(i).isObstacleReplaced = false;
                 if (staticObstacles.get(k).getObstacleType() == TypeObstacles.TREE ||  staticObstacles.get(k).getObstacleType() == TypeObstacles.MOUNTAIN) {
                     infoRects.get(i).isPlayerMoved = false;
+                    infoRects.get(i).obstacleType = staticObstacles.get(k).getObstacleType();
                 }
             }
 
@@ -169,6 +171,8 @@ public class HelloApplication extends Application {
                 for (int j = 1; j <= staticObstacles.get(k).sizeY; j++) {
                     for (int l = 0; l < staticObstacles.get(k).sizeX; l++) {
                         infoRects.get(l + startImageIndex).isPlayerMoved = false;
+                        infoRects.get(l + startImageIndex).obstacleType = staticObstacles.get(k).getObstacleType();
+                        infoRects.get(l + startImageIndex).rectangle.setFill(Color.BLUE);
                     }
                     startImageIndex += staticObstacles.get(k).sizeX + 2;
                 }
@@ -292,7 +296,7 @@ public class HelloApplication extends Application {
 
     public void tick(){
         arthurMorgan.move(windowWidth,windowHeight);
-        arthurMorgan.shouldCheckAround(windowWidth, rectangleSize, gapSize, rectangleArray);
+        arthurMorgan.shouldCheckAround(windowWidth, windowHeight, rectangleSize, gapSize, rectangleArray);
     }
 
 
