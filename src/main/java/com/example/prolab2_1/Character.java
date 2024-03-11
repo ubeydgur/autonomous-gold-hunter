@@ -24,6 +24,8 @@ public class Character {
     int characterSizeX;
     int characterSizeY;
     int currentRectangleIndex;
+    int maxStraigthWay = 25;
+    int currentStraightWay = 0;
     InputStream imagePath;
     ImageView imageView;
     Image image;
@@ -45,11 +47,20 @@ public class Character {
         imageView.setFitWidth(this.characterSizeX);
     }
 
+
     public void specifyDirectionRandomly() {
         Random random = new Random();
         int enumLength = MotionDirection.values().length;
         int directionIndex = random.nextInt(enumLength);
+        MotionDirection lastDirection = direction;
         direction = MotionDirection.values()[directionIndex];
+        currentStraightWay = 0;
+        while (lastDirection != null &&
+                (((lastDirection == MotionDirection.DOWN || lastDirection == MotionDirection.UP) && (direction == MotionDirection.DOWN || direction == MotionDirection.UP)) ||
+                ((lastDirection == MotionDirection.LEFT || lastDirection == MotionDirection.RIGHT) && (direction == MotionDirection.LEFT || direction == MotionDirection.RIGHT)))) {
+            directionIndex = random.nextInt(enumLength);
+            direction = MotionDirection.values()[directionIndex];
+        }
     }
 
     public void move(int windowWidth, int windowHeight) {
@@ -69,7 +80,7 @@ public class Character {
             specifyDirectionRandomly();
     }
 
-    public boolean shouldCheckAround(int windowWidth, double rectangleSize, double gapSize, ArrayList<InfoRect> rectArrayList) {
+    public boolean shouldCheckAround(int windowWidth, int windowHeight, double rectangleSize, double gapSize, ArrayList<InfoRect> rectArrayList) {
         if (Math.abs(imageView.getY() - lastLocationY) >= (rectangleSize + gapSize)) {
             lastLocationY = (int)imageView.getY();
 
@@ -81,9 +92,12 @@ public class Character {
                     currentRectangleIndex += (windowWidth / (rectangleSize + gapSize));
                     break;
             }
-
             rectArrayList.get(currentRectangleIndex).rectangle.setFill(Color.RED);
-            checkDirectionsAvailable(windowWidth, rectArrayList);
+            checkDirectionsAvailable(windowWidth, windowHeight, rectArrayList);
+            currentStraightWay++;
+            if (currentStraightWay >= maxStraigthWay) {
+                specifyDirectionRandomly();
+            }
             return true;
         }
 
@@ -97,8 +111,12 @@ public class Character {
                     currentRectangleIndex--;
                     break;
             }
-            checkDirectionsAvailable(windowWidth, rectArrayList);
+            checkDirectionsAvailable(windowWidth, windowHeight, rectArrayList);
             rectArrayList.get(currentRectangleIndex).rectangle.setFill(Color.RED);
+            currentStraightWay++;
+            if (currentStraightWay >= maxStraigthWay) {
+                specifyDirectionRandomly();
+            }
             return true;
         }
 
@@ -107,41 +125,50 @@ public class Character {
 
 
 
-    public void checkDirectionsAvailable(int windowWidth, ArrayList<InfoRect> infoRectList)
+    public void checkDirectionsAvailable(int windowWidth, int windowHeight, ArrayList<InfoRect> infoRectList)
     {
-        /*
-        * Left = -1 -2 -3
-        * Right = 1 2 3
-        * Up = -width -2width -3width
-        * Down = width 2width 3width
-        */
-
         switch (direction) {
             case UP:
                 for (int i = 1; i <= 3; i++) {
-                    if (!infoRectList.get(currentRectangleIndex - windowWidth / 10 * i).isPlayerMoved)
+                    if ((currentRectangleIndex - windowWidth / 10 * i) >= 0 &&
+                            !infoRectList.get(currentRectangleIndex - windowWidth / 10 * i).isPlayerMoved) {
                         specifyDirectionRandomly();
+                        if (i == 3)
+                            System.out.println(infoRectList.get(currentRectangleIndex - windowWidth / 10 * i).obstacleType);
+                    }
                 }
                 break;
 
             case DOWN:
                 for (int i = 1; i <= 3; i++) {
-                    if (!infoRectList.get(currentRectangleIndex + windowWidth / 10 * i).isPlayerMoved)
+                    if ((currentRectangleIndex + windowWidth / 10 * i) < (windowWidth / 10 * windowHeight / 10) &&
+                            !infoRectList.get(currentRectangleIndex + windowWidth / 10 * i).isPlayerMoved) {
                         specifyDirectionRandomly();
+                        if (i == 3)
+                            System.out.println(infoRectList.get(currentRectangleIndex + windowWidth / 10 * i).obstacleType);
+                    }
                 }
                 break;
 
             case LEFT:
                 for (int i = 1; i <= 3; i++) {
-                    if (!infoRectList.get(currentRectangleIndex - i).isPlayerMoved)
+                    if ((currentRectangleIndex - i > currentRectangleIndex - (currentRectangleIndex % 100) - 1)
+                            && !infoRectList.get(currentRectangleIndex - i).isPlayerMoved) {
                         specifyDirectionRandomly();
+                        if (i == 3)
+                            System.out.println(infoRectList.get(currentRectangleIndex - i).obstacleType);
+                    }
                 }
                 break;
 
             case RIGHT:
                 for (int i = 1; i <= 3; i++) {
-                    if (!infoRectList.get(currentRectangleIndex + i).isPlayerMoved)
+                    if ((currentRectangleIndex + i < currentRectangleIndex + (100 - currentRectangleIndex % 100)) &&
+                            !infoRectList.get(currentRectangleIndex + i).isPlayerMoved) {
                         specifyDirectionRandomly();
+                        if (i == 3)
+                            System.out.println(infoRectList.get(currentRectangleIndex + i).obstacleType);
+                    }
                 }
                 break;
         }
