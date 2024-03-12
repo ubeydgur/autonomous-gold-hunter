@@ -30,11 +30,11 @@ public class HelloApplication extends Application {
     Character arthurMorgan = null;
     int characterSizeX = 1;
     int characterSizeY = 1;
-    int windowHeight = 1000;
-    int windowWidth = 1000;
-    double rectangleSize = 9.5;
-    double gapSize = 0.5;
-    double rectangleAndGapSize = rectangleSize + gapSize;
+    static int windowHeight = 1000;
+    static int windowWidth = 1000;
+    static double rectangleSize = 9.5;
+    static double gapSize = 0.5;
+    static double rectangleAndGapSize = rectangleSize + gapSize;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -80,7 +80,7 @@ public class HelloApplication extends Application {
 
         // Create Obstacles and Treasures
         int totalStaticObstacle = 20;
-        int totalDynamicObstacle = 10;
+        int totalDynamicObstacle = 3;
         int totalTreasure = 5;
         int randomSeason;
         int randomObstacle;
@@ -120,7 +120,7 @@ public class HelloApplication extends Application {
         }
 
         // Set Coordinates of Treasures and Obstacles
-        ArrayList<RectangleInfo> rectangleInfo = new ArrayList<>();
+        ArrayList<RectangleInfo> rectanglesInfo = new ArrayList<>();
         int imageRandomX;
         int imageRandomY;
         int imageRectangleIndex;
@@ -154,11 +154,11 @@ public class HelloApplication extends Application {
                         imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountY);
 
                         if (rectangleArray.get(imageRectangleIndex).isObstaclePlaced) {
-                            rectangleInfo.add(rectangleArray.get(imageRectangleIndex));
+                            rectanglesInfo.add(rectangleArray.get(imageRectangleIndex));
                         }
                         else {
                             m--;
-                            rectangleInfo.clear();
+                            rectanglesInfo.clear();
                             continue search;
                         }
                     }
@@ -166,11 +166,11 @@ public class HelloApplication extends Application {
             }
 
 
-            for (int i = 0; i < rectangleInfo.size(); i++) {
-                rectangleInfo.get(i).isObstaclePlaced = false;
+            for (int i = 0; i < rectanglesInfo.size(); i++) {
+                rectanglesInfo.get(i).isObstaclePlaced = false;
                 if (staticObstacles.get(k).getObstacleType() == TypeObstacles.TREE ||  staticObstacles.get(k).getObstacleType() == TypeObstacles.MOUNTAIN) {
-                    rectangleInfo.get(i).isPlayerMoved = false;
-                    rectangleInfo.get(i).obstacleType = staticObstacles.get(k).getObstacleType();
+                    rectanglesInfo.get(i).isPlayerMoved = false;
+                    rectanglesInfo.get(i).obstacleType = staticObstacles.get(k).getObstacleType();
                 }
             }
 
@@ -178,51 +178,51 @@ public class HelloApplication extends Application {
             if (staticObstacles.get(k).getObstacleType() == TypeObstacles.ROCK ||  staticObstacles.get(k).getObstacleType() == TypeObstacles.WALL) {
                 for (int j = 1; j <= staticObstacles.get(k).sizeY; j++) {
                     for (int l = 0; l < staticObstacles.get(k).sizeX; l++) {
-                        rectangleInfo.get(l + startImageIndex).isPlayerMoved = false;
-                        rectangleInfo.get(l + startImageIndex).obstacleType = staticObstacles.get(k).getObstacleType();
+                        rectanglesInfo.get(l + startImageIndex).isPlayerMoved = false;
+                        rectanglesInfo.get(l + startImageIndex).obstacleType = staticObstacles.get(k).getObstacleType();
                     }
                     startImageIndex += staticObstacles.get(k).sizeX + 2;
                 }
             }
 
 
-            staticObstacles.get(k).imageView.setX(rectangleInfo.get(staticObstacles.get(k).sizeX + imageBorderSpace).rectangle.getX());
-            staticObstacles.get(k).imageView.setY(rectangleInfo.get(staticObstacles.get(k).sizeX + imageBorderSpace - 1).rectangle.getY());
-            rectangleInfo.clear();
+            staticObstacles.get(k).imageView.setX(rectanglesInfo.get(staticObstacles.get(k).sizeX + imageBorderSpace).rectangle.getX());
+            staticObstacles.get(k).imageView.setY(rectanglesInfo.get(staticObstacles.get(k).sizeX + imageBorderSpace - 1).rectangle.getY());
+            rectanglesInfo.clear();
         }
 
         // Set Coordinates of Dynamic Obstacles
         for (int k = 0; k < dynamicObstacles.size(); k++) {
             search:
             for (int m = 0; m < 1; m++) {
-                imageRandomY = random.nextInt(rectangleAmountY - dynamicObstacles.get(k).sizeY);
-                imageRandomX = random.nextInt(rectangleAmountX - dynamicObstacles.get(k).sizeX);
+                imageRandomY = random.nextInt(rectangleAmountY - dynamicObstacles.get(k).visitFieldY);
+                imageRandomX = random.nextInt(rectangleAmountX - dynamicObstacles.get(k).visitFieldX);
 
-                for (int y = 0; y < dynamicObstacles.get(k).sizeY; y++) {
-                    for (int x = 0; x < dynamicObstacles.get(k).sizeX; x++) {
+                for (int y = 0; y < dynamicObstacles.get(k).visitFieldY; y++) {
+                    for (int x = 0; x < dynamicObstacles.get(k).visitFieldX; x++) {
                         imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountY);
                         if (rectangleArray.get(imageRectangleIndex).isObstaclePlaced) {
-                            rectangleInfo.add(rectangleArray.get(imageRectangleIndex));
+                            rectanglesInfo.add(rectangleArray.get(imageRectangleIndex));
                         }
                         else {
                             m--;
-                            rectangleInfo.clear();
+                            rectanglesInfo.clear();
                             continue search;
                         }
                     }
                 }
             }
 
-            for (int i = 0; i < rectangleInfo.size(); i++) {
-                rectangleInfo.get(i).rectangle.setFill(Color.LIGHTPINK);
-                rectangleInfo.get(i).isObstaclePlaced = false;
-                rectangleInfo.get(i).isPlayerMoved = false;
-                rectangleInfo.get(i).obstacleType = dynamicObstacles.get(k).species;
+            for (int i = 0; i < rectanglesInfo.size(); i++) {
+                rectanglesInfo.get(i).rectangle.setFill(Color.LIGHTPINK);
+                rectanglesInfo.get(i).isObstaclePlaced = false;
+                rectanglesInfo.get(i).isPlayerMoved = false;
+                rectanglesInfo.get(i).obstacleType = dynamicObstacles.get(k).species;
             }
 
-            dynamicObstacles.get(k).imageView.setX(rectangleInfo.get(0).rectangle.getX());
-            dynamicObstacles.get(k).imageView.setY(rectangleInfo.get(0).rectangle.getY());
-            rectangleInfo.clear();
+            dynamicObstacles.get(k).imageView.setX(rectanglesInfo.get(0).rectangle.getX());
+            dynamicObstacles.get(k).imageView.setY(rectanglesInfo.get(0).rectangle.getY());
+            rectanglesInfo.clear();
         }
 
         // Set Coordinates of Treasures
@@ -236,23 +236,23 @@ public class HelloApplication extends Application {
                     for (int x = 0; x < treasures.get(k).sizeX; x++) {
                         imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountY);
                         if (rectangleArray.get(imageRectangleIndex).isObstaclePlaced) {
-                            rectangleInfo.add(rectangleArray.get(imageRectangleIndex));
+                            rectanglesInfo.add(rectangleArray.get(imageRectangleIndex));
                         }
                         else {
                             m--;
-                            rectangleInfo.clear();
+                            rectanglesInfo.clear();
                             continue search;
                         }
                     }
                 }
             }
 
-            for (int i = 0; i < rectangleInfo.size(); i++)
-                rectangleInfo.get(i).isObstaclePlaced = false;
+            for (int i = 0; i < rectanglesInfo.size(); i++)
+                rectanglesInfo.get(i).isObstaclePlaced = false;
 
-            treasures.get(k).imageView.setX(rectangleInfo.get(0).rectangle.getX());
-            treasures.get(k).imageView.setY(rectangleInfo.get(0).rectangle.getY());
-            rectangleInfo.clear();
+            treasures.get(k).imageView.setX(rectanglesInfo.get(0).rectangle.getX());
+            treasures.get(k).imageView.setY(rectanglesInfo.get(0).rectangle.getY());
+            rectanglesInfo.clear();
         }
 
         // Create Character
@@ -305,7 +305,7 @@ public class HelloApplication extends Application {
 
     public void tick(){
         arthurMorgan.move(windowWidth,windowHeight);
-        arthurMorgan.shouldCheckAround(windowWidth, windowHeight, (int)rectangleAndGapSize, rectangleArray);
+        arthurMorgan.checkDirection(windowWidth, windowHeight, (int)rectangleAndGapSize, rectangleArray);
     }
 
 
