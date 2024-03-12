@@ -25,11 +25,11 @@ public class Treasure {
     Treasure(String imagePath, Enum treasureType) throws FileNotFoundException {
         this.treasureType = treasureType;
         this.imagePath = new FileInputStream(imagePath);
-        sizeX = 3;
-        sizeY = 3;
+        sizeX = 2;
+        sizeY = 2;
         image = new Image(this.imagePath);
         imageView = new ImageView(image);
-        imageView.setFitHeight(sizeY * 10);
-        imageView.setFitWidth(sizeX * 10);
+        imageView.setFitHeight(sizeY * HelloApplication.rectangleAndGapSize);
+        imageView.setFitWidth(sizeX * HelloApplication.rectangleAndGapSize);
     }
 }
