@@ -134,7 +134,7 @@ public class HelloApplication extends Application {
             for (int m = 0; m < 1; m++) {
                 imageRandomY = random.nextInt(rectangleAmountY - staticObstacles.get(k).sizeY);
 
-                if (staticObstacles.get(k).getSeason() == "summer")
+                if (staticObstacles.get(k).season == Season.SUMMER)
                     imageRandomX = random.nextInt(rectangleAmountX / 2 - staticObstacles.get(k).sizeX) + rectangleAmountX / 2;
                 else
                     imageRandomX = random.nextInt(rectangleAmountX / 2 - staticObstacles.get(k).sizeX);
