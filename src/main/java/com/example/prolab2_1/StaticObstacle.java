@@ -25,11 +25,16 @@ enum RockObstacles {
     ROCK3X3
 }
 
-public class StaticObstacle extends ObstacleBase{
-    private String season;
-    private TypeObstacles obstacleType;
+enum Season {
+    WINTER,
+    SUMMER
+}
 
-    StaticObstacle(String imagePath, int sizeX, int sizeY, String season, TypeObstacles obstacleType) throws FileNotFoundException {
+public class StaticObstacle extends ObstacleBase{
+    Season season;
+    TypeObstacles obstacleType;
+
+    StaticObstacle(String imagePath, int sizeX, int sizeY, Season season, TypeObstacles obstacleType) throws FileNotFoundException {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.season = season;
@@ -39,10 +44,6 @@ public class StaticObstacle extends ObstacleBase{
         imageView = new ImageView(image);
         imageView.setFitHeight(sizeY * HelloApplication.rectangleAndGapSize);
         imageView.setFitWidth(sizeX * HelloApplication.rectangleAndGapSize);
-    }
-
-    public String getSeason(){
-        return season;
     }
 
     public TypeObstacles getObstacleType() {
