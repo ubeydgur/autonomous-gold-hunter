@@ -83,9 +83,9 @@ public class ObstacleGenerator {
     public DynamicObstacle generateDynamicObstacle (DynamicObstacles dynamicObstacle) throws FileNotFoundException {
         switch (dynamicObstacle){
             case BEE:
-                return new DynamicObstacle("pictures/bee.png", 3, 2, DynamicObstacles.BEE);
+                return new DynamicObstacle("pictures/bee.png", 5, 2,2, 2, DynamicObstacles.BEE);
             case BIRD:
-                return new DynamicObstacle("pictures/bird.png", 2, 5, DynamicObstacles.BIRD);
+                return new DynamicObstacle("pictures/bird.png", 2, 9, 2, 2, DynamicObstacles.BIRD);
         }
         return null;
     }
