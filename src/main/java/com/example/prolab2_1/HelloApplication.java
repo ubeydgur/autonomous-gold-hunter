@@ -264,19 +264,22 @@ public class HelloApplication extends Application {
         int locationX;
         int locationY;
 
+        int characterMaxStraightWay = getMinimumRectagleAmount(rectangleAmountX, rectangleAmountY) / 4;
+        int characterMinStraightWay = getMinimumRectagleAmount(rectangleAmountX, rectangleAmountY) / 6;
         while (!isCharacterCreated) {
             locationX = random.nextInt(rectangleAmountX - characterSizeX);
             locationY = random.nextInt(rectangleAmountY - characterSizeY);
 
             if (rectangleArray.get(locationX + locationY  * rectangleAmountY).isObstaclePlaced){
-                arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize);
+                arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
                 arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountY;
+                arthurMorgan.frontDirection = arthurMorgan.getDirection(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray);
+                arthurMorgan.backDirection = arthurMorgan.getBackDirection();
                 isCharacterCreated = true;
             }
         }
 
         // With the tick method, the character is made to move continuously on the screen
-        arthurMorgan.specifyDirectionRandomly();
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
