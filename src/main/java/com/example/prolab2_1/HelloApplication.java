@@ -151,7 +151,7 @@ public class HelloApplication extends Application {
 
                 for (int y = 0; y < staticObstacles.get(k).sizeY + obstacleBorderSpace; y++) {
                     for (int x = 0; x < staticObstacles.get(k).sizeX + obstacleBorderSpace; x++) {
-                        imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountY);
+                        imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountX);
 
                         if (rectangleArray.get(imageRectangleIndex).isObstaclePlaced) {
                             rectanglesInfo.add(rectangleArray.get(imageRectangleIndex));
@@ -197,10 +197,10 @@ public class HelloApplication extends Application {
             for (int m = 0; m < 1; m++) {
                 imageRandomY = random.nextInt(rectangleAmountY - dynamicObstacles.get(k).visitFieldY);
                 imageRandomX = random.nextInt(rectangleAmountX - dynamicObstacles.get(k).visitFieldX);
-
+                
                 for (int y = 0; y < dynamicObstacles.get(k).visitFieldY; y++) {
                     for (int x = 0; x < dynamicObstacles.get(k).visitFieldX; x++) {
-                        imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountY);
+                        imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountX);
                         if (rectangleArray.get(imageRectangleIndex).isObstaclePlaced) {
                             rectanglesInfo.add(rectangleArray.get(imageRectangleIndex));
                         }
