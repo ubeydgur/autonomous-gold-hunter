@@ -248,7 +248,11 @@ public class HelloApplication extends Application {
             }
 
             for (int i = 0; i < rectanglesInfo.size(); i++)
+            {
                 rectanglesInfo.get(i).isObstaclePlaced = false;
+                rectanglesInfo.get(i).isPlayerMoved = false;
+                rectanglesInfo.get(i).obstacleType = treasures.get(k).treasureType;
+            }
 
             treasures.get(k).imageView.setX(rectanglesInfo.get(0).rectangle.getX());
             treasures.get(k).imageView.setY(rectanglesInfo.get(0).rectangle.getY());
