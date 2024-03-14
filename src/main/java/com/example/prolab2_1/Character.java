@@ -117,4 +117,63 @@ public class Character {
 
         return newDirection;
     }
+
+    public void checkMotionDirection(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
+        switch (frontDirection) {
+            case UP:
+                for (int i = 1; i <= 3; i++) {
+                    if ((currentRectangleIndex - windowWidth / rectangleAndGapSize * i) >= 0 &&
+                            !rectanglesInfo.get(currentRectangleIndex - windowWidth / rectangleAndGapSize * i).isPlayerMoved) {
+                        frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+                        backDirection = getBackDirection();
+                    }
+                }
+                break;
+
+            case DOWN:
+                for (int i = 1; i <= 3; i++) {
+                    if ((currentRectangleIndex + windowWidth / rectangleAndGapSize * i) < (windowWidth / rectangleAndGapSize * windowHeight / rectangleAndGapSize) &&
+                            !rectanglesInfo.get(currentRectangleIndex + windowWidth / rectangleAndGapSize * i).isPlayerMoved) {
+                        frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+                        backDirection = getBackDirection();
+                    }
+                }
+                break;
+
+            case LEFT:
+                for (int i = 1; i <= 3; i++) {
+                    if ((currentRectangleIndex - i > currentRectangleIndex - (currentRectangleIndex % (windowWidth / rectangleAndGapSize)) - 1)
+                            && !rectanglesInfo.get(currentRectangleIndex - i).isPlayerMoved) {
+                        frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+                        backDirection = getBackDirection();
+                    }
+                }
+                break;
+
+            case RIGHT:
+                for (int i = 1; i <= 3; i++) {
+                    if ((currentRectangleIndex + i < currentRectangleIndex + ((windowWidth / rectangleAndGapSize) - currentRectangleIndex % (windowWidth / rectangleAndGapSize))) &&
+                            !rectanglesInfo.get(currentRectangleIndex + i).isPlayerMoved) {
+                        frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+                        backDirection = getBackDirection();
+                    }
+                }
+                break;
+        }
+    }
+
+    
+    public MotionDirection getBackDirection() {
+        switch (frontDirection) {
+            case UP:
+                return MotionDirection.DOWN;
+            case DOWN:
+                return MotionDirection.UP;
+            case LEFT:
+                return MotionDirection.RIGHT;
+            case RIGHT:
+                return MotionDirection.LEFT;
+        }
+        return null;
+    }
 }
