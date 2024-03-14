@@ -1,6 +1,7 @@
 package com.example.prolab2_1;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,6 +28,8 @@ public class Character {
     int minStraigthWay;
     int randomStraigthWay;
     int currentStraightWay = 0;
+    final int viewField = 7;
+    final int viewDirection = 3;
     InputStream imagePath;
     ImageView imageView;
     Image image;
@@ -162,7 +165,23 @@ public class Character {
         }
     }
 
-    
+
+    public void checkAround(int windowWidth, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
+        int aroundInitialIndex = currentRectangleIndex - viewDirection - viewDirection * windowWidth / rectangleAndGapSize;
+        if (aroundInitialIndex < 0) {
+
+        }
+        for (int y = 0; y < viewField; y++) {
+            for (int x = 0; x < viewField; x++) {
+                if (aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize >= 0 && aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize < 10000) {
+                    rectanglesInfo.get(aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize).rectangle.setFill(Color.BLUE);
+                }
+
+            }
+        }
+    }
+
+
     public MotionDirection getBackDirection() {
         switch (frontDirection) {
             case UP:
