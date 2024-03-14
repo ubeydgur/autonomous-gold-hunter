@@ -121,6 +121,69 @@ public class Character {
         return newDirection;
     }
 
+
+    public void move(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
+        if (imageView.getY() > 0 && frontDirection == MotionDirection.UP)
+            imageView.setY(imageView.getY() - 0.5);
+
+        else if (imageView.getY() < windowHeight - characterSizeY && frontDirection == MotionDirection.DOWN)
+            imageView.setY(imageView.getY() + 0.5);
+
+        else if (imageView.getX() > 0 && frontDirection == MotionDirection.LEFT)
+            imageView.setX(imageView.getX() - 0.5);
+
+        else if (imageView.getX() < windowWidth - characterSizeX && frontDirection == MotionDirection.RIGHT)
+            imageView.setX(imageView.getX() + 0.5);
+
+        else {
+            frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+            backDirection = getBackDirection();
+        }
+
+        if (Math.abs(imageView.getY() - lastLocationY) >= rectangleAndGapSize) {
+            lastLocationY = (int)imageView.getY();
+            switch (frontDirection) {
+                case UP:
+                    currentRectangleIndex -= (windowWidth / rectangleAndGapSize);
+                    break;
+                case DOWN:
+                    currentRectangleIndex += (windowWidth / rectangleAndGapSize);
+                    break;
+            }
+
+            rectanglesInfo.get(currentRectangleIndex).rectangle.setFill(Color.RED);
+            checkAround(windowWidth,rectangleAndGapSize,rectanglesInfo);
+            checkMotionDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+            currentStraightWay++;
+            if (currentStraightWay >= randomStraigthWay) {
+                frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+                backDirection = getBackDirection();
+            }
+        }
+
+        else if (Math.abs(imageView.getX() - lastLocationX) >= rectangleAndGapSize){
+            lastLocationX = (int)imageView.getX();
+            switch (frontDirection) {
+                case RIGHT:
+                    currentRectangleIndex++;
+                    break;
+                case LEFT:
+                    currentRectangleIndex--;
+                    break;
+            }
+
+            rectanglesInfo.get(currentRectangleIndex).rectangle.setFill(Color.RED);
+            checkAround(windowWidth,rectangleAndGapSize,rectanglesInfo);
+            checkMotionDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+            currentStraightWay++;
+            if (currentStraightWay >= randomStraigthWay) {
+                frontDirection = getDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
+                backDirection = getBackDirection();
+            }
+        }
+    }
+    
+
     public void checkMotionDirection(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
         switch (frontDirection) {
             case UP:
