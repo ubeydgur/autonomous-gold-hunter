@@ -15,7 +15,7 @@ enum TreasureType {
 }
 
 public class Treasure {
-    private Enum treasureType;
+    public Enum treasureType;
     protected int sizeX;
     protected int sizeY;
     protected Image image;
@@ -31,5 +31,11 @@ public class Treasure {
         imageView = new ImageView(image);
         imageView.setFitHeight(sizeY * HelloApplication.rectangleAndGapSize);
         imageView.setFitWidth(sizeX * HelloApplication.rectangleAndGapSize);
+    }
+
+    public void updateImage(String imagePath) throws FileNotFoundException {
+        InputStream newImagePath = new FileInputStream(imagePath);
+        Image newImage = new Image(newImagePath);
+        imageView.setImage(newImage);
     }
 }
