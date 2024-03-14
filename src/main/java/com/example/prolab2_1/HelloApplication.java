@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -282,7 +283,13 @@ public class HelloApplication extends Application {
         }
 
         // With the tick method, the character is made to move continuously on the screen
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> tick()));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), e -> {
+            try {
+                tick();
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
@@ -312,7 +319,7 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    public void tick(){
+    public void tick() throws FileNotFoundException {
         arthurMorgan.move(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray);
     }
 
