@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 enum MotionDirection{
@@ -37,6 +38,8 @@ public class Character {
     MotionDirection backDirection;
     ArrayList<MotionDirection> emptyDirections = new ArrayList<>();
     ArrayList<MotionDirection> lastFourDirections = new ArrayList<>();
+    ArrayList<TreasureType> treasuresType = new ArrayList<>();
+    ArrayList<Treasure> treasures = new ArrayList<>();
 
 
     public Character(String imagePath, int locationX, int locationY, int characterSizeX, int characterSizeY, int rectangleAndGapSize, int maxStraigthWay, int minStraigthWay) throws FileNotFoundException {
@@ -55,6 +58,7 @@ public class Character {
         imageView.setFitWidth(this.characterSizeX);
         this.maxStraigthWay = maxStraigthWay;
         this.minStraigthWay = minStraigthWay;
+        treasuresType.addAll(Arrays.asList(TreasureType.values()));
     }
 
 
@@ -122,7 +126,7 @@ public class Character {
     }
 
 
-    public void move(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
+    public void move(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) throws FileNotFoundException {
         if (imageView.getY() > 0 && frontDirection == MotionDirection.UP)
             imageView.setY(imageView.getY() - 0.5);
 
@@ -182,7 +186,7 @@ public class Character {
             }
         }
     }
-    
+
 
     public void checkMotionDirection(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
         switch (frontDirection) {
@@ -229,15 +233,18 @@ public class Character {
     }
 
 
-    public void checkAround(int windowWidth, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) {
+    public void checkAround(int windowWidth, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) throws FileNotFoundException {
         int aroundInitialIndex = currentRectangleIndex - viewDirection - viewDirection * windowWidth / rectangleAndGapSize;
-        if (aroundInitialIndex < 0) {
-
-        }
         for (int y = 0; y < viewField; y++) {
             for (int x = 0; x < viewField; x++) {
-                if (aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize >= 0 && aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize < 10000) {
-                    rectanglesInfo.get(aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize).rectangle.setFill(Color.BLUE);
+                final int index = aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize;
+                if (index >= 0 && index < 10000) {
+                    rectanglesInfo.get(index).rectangle.setFill(Color.BLUE);
+                    if (treasuresType.contains(rectanglesInfo.get(index).obstacleType)&& !treasures.contains(rectanglesInfo.get(index).treasure)) {
+                        treasures.add(rectanglesInfo.get(index).treasure);
+                        treasures.getLast().updateImage("pictures/bee.png");
+                    }
+                    rectanglesInfo.get(index).isSeen = true;
                 }
 
             }
