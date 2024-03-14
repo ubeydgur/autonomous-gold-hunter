@@ -132,12 +132,12 @@ public class HelloApplication extends Application {
         for (int k = 0; k < staticObstacles.size(); k++) {
             search:
             for (int m = 0; m < 1; m++) {
-                imageRandomY = random.nextInt(rectangleAmountY - staticObstacles.get(k).sizeY);
+                imageRandomY = random.nextInt(rectangleAmountY - 1 - staticObstacles.get(k).sizeY);
 
                 if (staticObstacles.get(k).season == Season.SUMMER)
-                    imageRandomX = random.nextInt(rectangleAmountX / 2 - staticObstacles.get(k).sizeX) + rectangleAmountX / 2;
+                    imageRandomX = random.nextInt((rectangleAmountX - 1) / 2 - staticObstacles.get(k).sizeX) + rectangleAmountX / 2;
                 else
-                    imageRandomX = random.nextInt(rectangleAmountX / 2 - staticObstacles.get(k).sizeX);
+                    imageRandomX = random.nextInt((rectangleAmountX - 1) / 2 - staticObstacles.get(k).sizeX);
 
                 if(staticObstacles.get(k).getObstacleType() == TypeObstacles.MOUNTAIN ||
                         staticObstacles.get(k).getObstacleType() ==TypeObstacles.TREE) {
@@ -195,9 +195,9 @@ public class HelloApplication extends Application {
         for (int k = 0; k < dynamicObstacles.size(); k++) {
             search:
             for (int m = 0; m < 1; m++) {
-                imageRandomY = random.nextInt(rectangleAmountY - dynamicObstacles.get(k).visitFieldY);
-                imageRandomX = random.nextInt(rectangleAmountX - dynamicObstacles.get(k).visitFieldX);
-                
+                imageRandomY = random.nextInt(rectangleAmountY - 1 - dynamicObstacles.get(k).visitFieldY);
+                imageRandomX = random.nextInt(rectangleAmountX - 1 - dynamicObstacles.get(k).visitFieldX);
+
                 for (int y = 0; y < dynamicObstacles.get(k).visitFieldY; y++) {
                     for (int x = 0; x < dynamicObstacles.get(k).visitFieldX; x++) {
                         imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountX);
