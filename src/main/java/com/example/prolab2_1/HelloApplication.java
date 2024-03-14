@@ -22,6 +22,7 @@ class RectangleInfo {
     boolean isPlayerMoved = true;
     boolean isSeen = false;
     Enum obstacleType;
+    Treasure treasure;
 }
 
 public class HelloApplication extends Application {
@@ -252,6 +253,7 @@ public class HelloApplication extends Application {
                 rectanglesInfo.get(i).isObstaclePlaced = false;
                 rectanglesInfo.get(i).isPlayerMoved = false;
                 rectanglesInfo.get(i).obstacleType = treasures.get(k).treasureType;
+                rectanglesInfo.get(i).treasure = treasures.get(k);
             }
 
             treasures.get(k).imageView.setX(rectanglesInfo.get(0).rectangle.getX());
