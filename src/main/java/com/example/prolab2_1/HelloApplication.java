@@ -311,11 +311,16 @@ public class HelloApplication extends Application {
     }
 
     public void tick(){
-        arthurMorgan.move(windowWidth,windowHeight);
-        arthurMorgan.checkDirection(windowWidth, windowHeight, (int)rectangleAndGapSize, rectangleArray);
+        arthurMorgan.move(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray);
     }
 
-
+    int getMinimumRectagleAmount(int rectangleAmountX, int rectangleAmountY)
+    {
+        if (rectangleAmountX < rectangleAmountY) {
+            return rectangleAmountX;
+        }
+        return rectangleAmountY;
+    }
     public static void main(String[] args) {
         launch();
     }
