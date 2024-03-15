@@ -27,16 +27,18 @@ class RectangleInfo {
 }
 
 public class HelloApplication extends Application {
-    ArrayList<RectangleInfo> rectangleArray = new ArrayList<>();
     Random random = new Random();
     Character arthurMorgan = null;
     int characterSizeX = 1;
     int characterSizeY = 1;
-    static int windowHeight = 1000;
-    static int windowWidth = 1000;
+    int windowHeight = 1000;
+    int windowWidth = 1000;
     static double rectangleSize = 9.5;
     static double gapSize = 0.5;
     static double rectangleAndGapSize = rectangleSize + gapSize;
+    ArrayList<RectangleInfo> rectangleArray = new ArrayList<>();
+    public static ArrayList<Treasure> treasures = new ArrayList<>();
+    public ArrayList<ArrayList<RectangleInfo>> separatedArea = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -46,8 +48,9 @@ public class HelloApplication extends Application {
         System.out.println("Enter Window Width: ");
         windowWidth = scanner.nextInt();*/
 
-        int rectangleAmountX = windowHeight / (int)rectangleAndGapSize;
-        int rectangleAmountY = windowWidth / (int)rectangleAndGapSize;
+        // X and X Coordinates and Total Number of Rectangles
+        int rectangleAmountX = windowWidth / (int)rectangleAndGapSize;
+        int rectangleAmountY = windowHeight / (int)rectangleAndGapSize;
         int rectangleTotal = rectangleAmountX * rectangleAmountY;
 
 
@@ -75,7 +78,7 @@ public class HelloApplication extends Application {
         // Add Generator and ArrayList for Obstacles and Treasures
         ArrayList<StaticObstacle> staticObstacles = new ArrayList<>();
         ArrayList<DynamicObstacle> dynamicObstacles = new ArrayList<>();
-        ArrayList<Treasure> treasures = new ArrayList<>();
+
 
         TreasureGenerator treasureGenerator = new TreasureGenerator();
         ObstacleGenerator obstacleGenerator = new ObstacleGenerator();
@@ -120,6 +123,7 @@ public class HelloApplication extends Application {
             treasures.add(treasureGenerator.emeraldChest());
             treasures.add(treasureGenerator.copperChest());
         }
+
 
         // Set Coordinates of Treasures and Obstacles
         ArrayList<RectangleInfo> rectanglesInfo = new ArrayList<>();
@@ -166,7 +170,6 @@ public class HelloApplication extends Application {
                     }
                 }
             }
-
 
             for (int i = 0; i < rectanglesInfo.size(); i++) {
                 rectanglesInfo.get(i).isObstaclePlaced = false;
@@ -253,7 +256,7 @@ public class HelloApplication extends Application {
             {
                 rectanglesInfo.get(i).isObstaclePlaced = false;
                 rectanglesInfo.get(i).isPlayerMoved = false;
-                rectanglesInfo.get(i).obstacleType = treasures.get(k).treasureType;
+                rectanglesInfo.get(i).obstacleType = treasures.get(k).getTreasureType();
                 rectanglesInfo.get(i).treasure = treasures.get(k);
             }
 
@@ -275,9 +278,9 @@ public class HelloApplication extends Application {
 
             if (rectangleArray.get(locationX + locationY  * rectangleAmountY).isObstaclePlaced){
                 arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
-                arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountY;
-                arthurMorgan.frontDirection = arthurMorgan.getDirection(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray);
-                arthurMorgan.backDirection = arthurMorgan.getBackDirection();
+                arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountX;
+                arthurMorgan.setFrontDirection(arthurMorgan.getDirection(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
+                arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
                 isCharacterCreated = true;
             }
         }
