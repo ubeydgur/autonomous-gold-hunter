@@ -14,8 +14,14 @@ enum TreasureType {
     COPPER
 }
 
+enum TreasureState{
+    OPEN,
+    CLOSE
+}
+
 public class Treasure {
-    public Enum treasureType;
+    private Enum treasureType;
+    private TreasureState treasureState;
     protected int sizeX;
     protected int sizeY;
     protected Image image;
@@ -23,6 +29,7 @@ public class Treasure {
     protected ImageView imageView;
 
     Treasure(String imagePath, Enum treasureType) throws FileNotFoundException {
+        treasureState = TreasureState.CLOSE;
         this.treasureType = treasureType;
         this.imagePath = new FileInputStream(imagePath);
         sizeX = 2;
@@ -38,4 +45,9 @@ public class Treasure {
         Image newImage = new Image(newImagePath);
         imageView.setImage(newImage);
     }
+
+    public Enum getTreasureType() { return treasureType; }
+    public TreasureState getTreasureState() { return treasureState; }
+
+    public void setTreasureState(TreasureState state) { treasureState = state; }
 }
