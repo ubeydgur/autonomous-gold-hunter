@@ -157,7 +157,7 @@ public class Character {
             }
 
             rectanglesInfo.get(currentRectangleIndex).rectangle.setFill(Color.RED);
-            checkAround(windowWidth,rectangleAndGapSize,rectanglesInfo);
+            checkAround(windowWidth, windowHeight,rectangleAndGapSize,rectanglesInfo);
             checkMotionDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
             currentStraightWay++;
             if (currentStraightWay >= randomStraigthWay) {
@@ -178,7 +178,7 @@ public class Character {
             }
 
             rectanglesInfo.get(currentRectangleIndex).rectangle.setFill(Color.RED);
-            checkAround(windowWidth,rectangleAndGapSize,rectanglesInfo);
+            checkAround(windowWidth, windowHeight, rectangleAndGapSize,rectanglesInfo);
             checkMotionDirection(windowWidth, windowHeight, rectangleAndGapSize, rectanglesInfo);
             currentStraightWay++;
             if (currentStraightWay >= randomStraigthWay) {
@@ -234,16 +234,30 @@ public class Character {
     }
 
 
-    public void checkAround(int windowWidth, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) throws FileNotFoundException {
+    public void checkAround(int windowWidth, int windowHeight, int rectangleAndGapSize, ArrayList<RectangleInfo> rectanglesInfo) throws FileNotFoundException {
         int aroundInitialIndex = currentRectangleIndex - viewDirection - viewDirection * windowWidth / rectangleAndGapSize;
         for (int y = 0; y < viewField; y++) {
             for (int x = 0; x < viewField; x++) {
                 final int index = aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize;
-                if (index >= 0 && index < 10000) {
+                boolean leftAndRightControl =   index % (windowWidth / rectangleAndGapSize) <= currentRectangleIndex % (windowWidth / rectangleAndGapSize) + viewDirection &&
+                                                index % (windowWidth / rectangleAndGapSize) >= currentRectangleIndex % (windowWidth / rectangleAndGapSize) - viewDirection;
+                boolean upAndDownControl =  index >= 0 &&
+                                            index < (windowWidth / rectangleAndGapSize) * (windowHeight / rectangleAndGapSize);
+
+                if (upAndDownControl && leftAndRightControl) {
                     rectanglesInfo.get(index).rectangle.setFill(Color.BLUE);
                     if (treasuresType.contains(rectanglesInfo.get(index).obstacleType)&& !treasures.contains(rectanglesInfo.get(index).treasure)) {
-                        treasures.add(rectanglesInfo.get(index).treasure);
-                        treasures.getLast().updateImage("pictures/bee.png");
+                        if (rectanglesInfo.get(index).treasure.getTreasureType() == targetTreasure &&
+                            rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE) {
+                            rectanglesInfo.get(index).treasure.setTreasureState(TreasureState.OPEN);
+                            rectanglesInfo.get(index).treasure.updateImage("pictures/bee.png");
+                            System.out.println("This treasure convenient! I am reach :)");
+                        }
+                        else if (rectanglesInfo.get(index).treasure.getTreasureType() != targetTreasure &&
+                                rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE){
+                            treasures.add(rectanglesInfo.get(index).treasure);
+                            System.out.println("This treasure not convenient! But added");
+                        }
                     }
                     rectanglesInfo.get(index).isSeen = true;
                 }
