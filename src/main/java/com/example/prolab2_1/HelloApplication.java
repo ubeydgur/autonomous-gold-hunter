@@ -67,6 +67,40 @@ public class HelloApplication extends Application {
             }
         }
 
+        // Split the Screen Into Areas
+        int separatedAreaSize = 50;
+        int speratedAreaX = rectangleAmountX / separatedAreaSize;
+        int speratedAreaY = rectangleAmountY / separatedAreaSize;
+        int currentY;
+        int currentX;
+        int initialY = 0;
+        int initialX = 0;
+        int rectangleAreaY = rectangleAmountY / speratedAreaY;
+        int rectangleAreaX = rectangleAmountX / speratedAreaX;
+
+        for (int i = 0; i < speratedAreaY * speratedAreaX; i++) {
+            separatedArea.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < separatedArea.size(); i++) {
+            for (currentY = initialY; currentY < rectangleAreaY; currentY++) {
+                for (currentX = initialX; currentX < rectangleAreaX; currentX++) {
+                    separatedArea.get(i).add(rectangleArray.get(currentX + currentY * rectangleAmountX));
+                }
+            }
+
+            if ((i + 1) % speratedAreaX == 0) {
+                initialY += separatedAreaSize;
+                rectangleAreaY += separatedAreaSize;
+                initialX = 0;
+                rectangleAreaX = separatedAreaSize;
+            }
+            else {
+                initialX += separatedAreaSize;
+                rectangleAreaX += separatedAreaSize;
+            }
+
+        }
 
         // Add Enums to ArrayList
         ArrayList<TypeObstacles> typeObstacle = new ArrayList<>();
