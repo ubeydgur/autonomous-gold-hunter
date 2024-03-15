@@ -34,12 +34,13 @@ public class Character {
     InputStream imagePath;
     ImageView imageView;
     Image image;
-    MotionDirection frontDirection;
-    MotionDirection backDirection;
-    ArrayList<MotionDirection> emptyDirections = new ArrayList<>();
-    ArrayList<MotionDirection> lastFourDirections = new ArrayList<>();
-    ArrayList<TreasureType> treasuresType = new ArrayList<>();
-    ArrayList<Treasure> treasures = new ArrayList<>();
+    private MotionDirection frontDirection;
+    private MotionDirection backDirection;
+    private TreasureType targetTreasure = TreasureType.GOLD;
+    private ArrayList<MotionDirection> emptyDirections = new ArrayList<>();
+    private ArrayList<MotionDirection> lastFourDirections = new ArrayList<>();
+    private ArrayList<TreasureType> treasuresType = new ArrayList<>();
+    private ArrayList<Treasure> treasures = new ArrayList<>();
 
 
     public Character(String imagePath, int locationX, int locationY, int characterSizeX, int characterSizeY, int rectangleAndGapSize, int maxStraigthWay, int minStraigthWay) throws FileNotFoundException {
@@ -265,4 +266,7 @@ public class Character {
         }
         return null;
     }
+
+    public void setFrontDirection(MotionDirection direction) { frontDirection = direction; }
+    public void setBackDirection(MotionDirection direction) { backDirection = direction; }
 }
