@@ -245,16 +245,31 @@ public class Character {
                                             index < (windowWidth / rectangleAndGapSize) * (windowHeight / rectangleAndGapSize);
 
                 if (upAndDownControl && leftAndRightControl) {
-                    rectanglesInfo.get(index).rectangle.setFill(Color.BLUE);
-                    if (treasuresType.contains(rectanglesInfo.get(index).obstacleType)&& !treasures.contains(rectanglesInfo.get(index).treasure)) {
+                    //rectanglesInfo.get(index).rectangle.setFill(Color.BLUE);
+                    if (treasuresType.contains(rectanglesInfo.get(index).obstacleType)) {
                         if (rectanglesInfo.get(index).treasure.getTreasureType() == targetTreasure &&
                             rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE) {
+
                             rectanglesInfo.get(index).treasure.setTreasureState(TreasureState.OPEN);
+                            HelloApplication.treasures.remove(rectanglesInfo.get(index).treasure);
+
+                            boolean shouldChangeTarget = true;
+                            for (Treasure treasure : HelloApplication.treasures) {
+                                if (treasure.getTreasureType() == targetTreasure) {
+                                    shouldChangeTarget = false;
+                                }
+                            }
+                            if (shouldChangeTarget) {
+                                int treasureIndex = targetTreasure.ordinal() + 1;
+                                targetTreasure = TreasureType.values()[treasureIndex];
+                                System.out.println(targetTreasure);
+                            }
                             rectanglesInfo.get(index).treasure.updateImage("pictures/bee.png");
                             System.out.println("This treasure convenient! I am reach :)");
                         }
                         else if (rectanglesInfo.get(index).treasure.getTreasureType() != targetTreasure &&
-                                rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE){
+                                rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE &&
+                                !treasures.contains(rectanglesInfo.get(index).treasure)){
                             treasures.add(rectanglesInfo.get(index).treasure);
                             System.out.println("This treasure not convenient! But added");
                         }
