@@ -6,13 +6,17 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -24,6 +28,22 @@ class RectangleInfo {
     boolean isSeen = false;
     Enum obstacleType;
     Treasure treasure;
+    InputStream imagePath;
+    ImageView imageView;
+    Image image;
+
+    RectangleInfo() throws FileNotFoundException {
+        imagePath = new FileInputStream("pictures/fog3.jpeg");
+        image = new Image(imagePath);
+        imageView = new ImageView(image);
+    }
+
+    public void setImageViewPosition(int x, int y) {
+        imageView.setX(x);
+        imageView.setY(y);
+        imageView.setFitWidth(rectangle.getWidth());
+        imageView.setFitHeight(rectangle.getHeight());
+    }
 }
 
 public class HelloApplication extends Application {
