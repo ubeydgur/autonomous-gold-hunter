@@ -89,7 +89,16 @@ public class HelloApplication extends Application {
         }
 
         // Split the Screen Into Areas
-        int separatedAreaSize = 50;
+        int minWindowSize = getMinimumRectangleAmount(rectangleAmountX, rectangleAmountY);
+        int separatedAreaSize = 0;
+
+        if (minWindowSize <= 100) {
+            separatedAreaSize = minWindowSize / 5;
+        }
+        else {
+            separatedAreaSize = minWindowSize / 10;
+        }
+
         int speratedAreaX = rectangleAmountX / separatedAreaSize;
         int speratedAreaY = rectangleAmountY / separatedAreaSize;
         int currentY;
