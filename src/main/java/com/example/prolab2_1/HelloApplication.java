@@ -79,6 +79,7 @@ public class HelloApplication extends Application {
             for (double x = 0; x < windowWidth; x += rectangleAndGapSize) {
                 RectangleInfo rectangleInfo = new RectangleInfo();
                 rectangleInfo.rectangle = new Rectangle(x, y, rectangleSize, rectangleSize);
+                rectangleInfo.setImageViewPosition((int)rectangleInfo.rectangle.getX(), (int)rectangleInfo.rectangle.getY());
                 if (x > windowHeight / 2 - rectangleAndGapSize)
                     rectangleInfo.rectangle.setFill(Color.WHITE);
                 else
@@ -106,6 +107,7 @@ public class HelloApplication extends Application {
             for (currentY = initialY; currentY < rectangleAreaY; currentY++) {
                 for (currentX = initialX; currentX < rectangleAreaX; currentX++) {
                     separatedArea.get(i).add(rectangleArray.get(currentX + currentY * rectangleAmountX));
+                    //rectangleArray.get(currentX + currentY * rectangleAmountX).rectangle.setFill(Color.BLUE);
                 }
             }
 
@@ -293,7 +295,7 @@ public class HelloApplication extends Application {
 
                 for (int y = 0; y < treasures.get(k).sizeY; y++) {
                     for (int x = 0; x < treasures.get(k).sizeX; x++) {
-                        imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountY);
+                        imageRectangleIndex = (imageRandomX + x) + ((imageRandomY + y) * rectangleAmountX);
                         if (rectangleArray.get(imageRectangleIndex).isObstaclePlaced) {
                             rectanglesInfo.add(rectangleArray.get(imageRectangleIndex));
                         }
@@ -324,13 +326,13 @@ public class HelloApplication extends Application {
         int locationX;
         int locationY;
 
-        int characterMaxStraightWay = getMinimumRectagleAmount(rectangleAmountX, rectangleAmountY) / 4;
-        int characterMinStraightWay = getMinimumRectagleAmount(rectangleAmountX, rectangleAmountY) / 6;
+        int characterMaxStraightWay = getMinimumRectangleAmount(rectangleAmountX, rectangleAmountY) / 4;
+        int characterMinStraightWay = getMinimumRectangleAmount(rectangleAmountX, rectangleAmountY) / 6;
         while (!isCharacterCreated) {
             locationX = random.nextInt(rectangleAmountX - characterSizeX);
             locationY = random.nextInt(rectangleAmountY - characterSizeY);
 
-            if (rectangleArray.get(locationX + locationY  * rectangleAmountY).isObstaclePlaced){
+            if (rectangleArray.get(locationX + locationY  * rectangleAmountX).isObstaclePlaced){
                 arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
                 arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountX;
                 arthurMorgan.setFrontDirection(arthurMorgan.getDirection(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
@@ -380,7 +382,7 @@ public class HelloApplication extends Application {
         arthurMorgan.move(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray);
     }
 
-    int getMinimumRectagleAmount(int rectangleAmountX, int rectangleAmountY)
+    int getMinimumRectangleAmount(int rectangleAmountX, int rectangleAmountY)
     {
         if (rectangleAmountX < rectangleAmountY) {
             return rectangleAmountX;
