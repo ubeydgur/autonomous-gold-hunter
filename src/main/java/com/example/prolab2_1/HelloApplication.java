@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -51,6 +53,8 @@ class RectangleInfo {
 }
 
 public class HelloApplication extends Application {
+    Group rootGame = new Group();
+    Group rootMain = new Group();
     Random random = new Random();
     Character arthurMorgan = null;
     int characterSizeX = 1;
@@ -58,6 +62,7 @@ public class HelloApplication extends Application {
     int windowHeight = 1000;
     int windowWidth = 1000;
     boolean screen2Opened = false;
+    boolean fogAdd = false;
     static double rectangleSize = 9.5;
     static double gapSize = 0.5;
     static double rectangleAndGapSize = rectangleSize + gapSize;
@@ -366,10 +371,7 @@ public class HelloApplication extends Application {
         timeline.play();
 
 
-        // Add Obstacles, Treasures, Rectangles, Fogs and Character to Screen
-        Group rootGame = new Group();
-        Group rootMain = new Group();
-
+        // Add Obstacles, Treasures, Rectangles and Character to Screen
         for (int i = 0; i < rectangleTotal; i++)
             rootGame.getChildren().add(rectangleArray.get(i).rectangle);
 
@@ -382,15 +384,12 @@ public class HelloApplication extends Application {
         for (int i = 0; i < treasures.size(); i++)
             rootGame.getChildren().add(treasures.get(i).imageView);
 
-        for (int i = 0; i < rectangleArray.size(); i++)
-            rootGame.getChildren().add(rectangleArray.get(i).imageView);
-
         rootGame.getChildren().add(arthurMorgan.imageView);
 
 
+        // Game screen appears when the button on the main screen is pressed
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                screen2Opened = true;
                 Stage stageGame = (Stage)((Node)e.getSource()).getScene().getWindow();
                 Scene sceneGame = new Scene(rootGame,1000,1000);
                 sceneGame.setFill(Color.BLACK);
@@ -398,6 +397,21 @@ public class HelloApplication extends Application {
                 stageGame.setScene(sceneGame);
                 stageGame.show();
 
+                // Will run when enter is pressed
+                sceneGame.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent keyEvent) {
+                        if (keyEvent.getCode() == KeyCode.ENTER && !fogAdd) {
+                            fogAdd = true;
+                            try {
+                                tick();
+                            } catch (FileNotFoundException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            screen2Opened = true;
+                        }
+                    }
+                });
             }
         };
 
@@ -420,8 +434,15 @@ public class HelloApplication extends Application {
         if (screen2Opened) {
             arthurMorgan.move(windowWidth, windowHeight, (int) rectangleAndGapSize, rectangleArray);
         }
+
+        if (!screen2Opened && fogAdd) {
+            for (int i = 0; i < rectangleArray.size(); i++) {
+                rootGame.getChildren().add(rectangleArray.get(i).imageView);
+            }
+        }
     }
 
+    // Returns min screen size
     int getMinimumRectangleAmount(int rectangleAmountX, int rectangleAmountY)
     {
         if (rectangleAmountX < rectangleAmountY) {
@@ -429,6 +450,7 @@ public class HelloApplication extends Application {
         }
         return rectangleAmountY;
     }
+
     public static void main(String[] args) {
         launch();
     }
