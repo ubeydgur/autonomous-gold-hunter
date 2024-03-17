@@ -240,15 +240,14 @@ public class Character {
             for (int x = 0; x < viewField; x++) {
                 final int index = aroundInitialIndex + x + y * windowWidth / rectangleAndGapSize;
                 boolean leftAndRightControl =   index % (windowWidth / rectangleAndGapSize) <= currentRectangleIndex % (windowWidth / rectangleAndGapSize) + viewDirection &&
-                                                index % (windowWidth / rectangleAndGapSize) >= currentRectangleIndex % (windowWidth / rectangleAndGapSize) - viewDirection;
+                        index % (windowWidth / rectangleAndGapSize) >= currentRectangleIndex % (windowWidth / rectangleAndGapSize) - viewDirection;
                 boolean upAndDownControl =  index >= 0 &&
-                                            index < (windowWidth / rectangleAndGapSize) * (windowHeight / rectangleAndGapSize);
+                        index < (windowWidth / rectangleAndGapSize) * (windowHeight / rectangleAndGapSize);
 
                 if (upAndDownControl && leftAndRightControl) {
-                    //rectanglesInfo.get(index).rectangle.setFill(Color.BLUE);
                     if (treasuresType.contains(rectanglesInfo.get(index).obstacleType)) {
                         if (rectanglesInfo.get(index).treasure.getTreasureType() == targetTreasure &&
-                            rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE) {
+                                rectanglesInfo.get(index).treasure.getTreasureState() == TreasureState.CLOSE) {
 
                             rectanglesInfo.get(index).treasure.setTreasureState(TreasureState.OPEN);
                             HelloApplication.treasures.remove(rectanglesInfo.get(index).treasure);
@@ -274,14 +273,19 @@ public class Character {
                             System.out.println("This treasure not convenient! But added");
                         }
                     }
-                    rectanglesInfo.get(index).isSeen = true;
+
+                    // Remove the Fog Where the Character Sees it
+                    if (!rectanglesInfo.get(index).isSeen) {
+                        rectanglesInfo.get(index).isSeen = true;
+                        rectanglesInfo.get(index).imageView.setImage(null);
+                    }
                 }
 
             }
         }
     }
 
-
+    // Reverse the Direction the Character is Going
     public MotionDirection getBackDirection() {
         switch (frontDirection) {
             case UP:
