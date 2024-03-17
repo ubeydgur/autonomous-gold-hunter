@@ -7,7 +7,6 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -17,42 +16,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-class RectangleInfo {
-    Rectangle rectangle;
-    boolean isObstaclePlaced = true;
-    boolean isPlayerMoved = true;
-    boolean isSeen = false;
-    Enum obstacleType;
-    Treasure treasure;
-    InputStream imagePath;
-    ImageView imageView;
-    Image image;
-
-    RectangleInfo() throws FileNotFoundException {
-        imagePath = new FileInputStream("pictures/fog.jpg");
-        image = new Image(imagePath);
-        imageView = new ImageView(image);
-    }
-
-    public void setImageViewPosition(int x, int y) {
-        imageView.setX(x);
-        imageView.setY(y);
-        imageView.setFitWidth(rectangle.getWidth());
-        imageView.setFitHeight(rectangle.getHeight());
-    }
-}
 
 public class HelloApplication extends Application {
     TextField textFieldHeight = new TextField();
@@ -65,26 +37,24 @@ public class HelloApplication extends Application {
     int characterSizeY = 1;
     int windowHeight;
     int windowWidth;
+    int rectangleAmountX;
+    int rectangleAmountY;
+    int rectangleTotal;
     boolean screen2Opened = false;
     boolean fogAdd = false;
     static double rectangleSize = 9.5;
     static double gapSize = 0.5;
     static double rectangleAndGapSize = rectangleSize + gapSize;
-    public ArrayList<RectangleInfo> rectangleArray = new ArrayList<>();
+    public ArrayList<Node> rectangleArray = new ArrayList<>();
     public static ArrayList<Treasure> treasures = new ArrayList<>();
-    public ArrayList<ArrayList<RectangleInfo>> separatedArea = new ArrayList<>();
+    public ArrayList<ArrayList<Node>> separatedArea = new ArrayList<>();
+
 
     @Override
     public void start(Stage stage) throws IOException {
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e){
             try {
-                /*System.out.println("Enter Window Height: ");
-                    Scanner scanner = new Scanner(System.in);
-                    windowHeight = scanner.nextInt();
-                    System.out.println("Enter Window Width: ");
-                    windowWidth = scanner.nextInt();*/
-
                 try {
                     windowHeight = Integer.parseInt(textFieldHeight.getText());
                     windowWidth = Integer.parseInt(textFieldWidth.getText());
@@ -95,18 +65,20 @@ public class HelloApplication extends Application {
                 }
 
                 // X and Y Coordinates and Total Number of Rectangles
-                int rectangleAmountX = windowWidth / (int)rectangleAndGapSize;
-                int rectangleAmountY = windowHeight / (int)rectangleAndGapSize;
-                int rectangleTotal = rectangleAmountX * rectangleAmountY;
+                rectangleAmountX = windowWidth / (int)rectangleAndGapSize;
+                rectangleAmountY = windowHeight / (int)rectangleAndGapSize;
+                rectangleTotal = rectangleAmountX * rectangleAmountY;
 
 
                 // Create Ractangles
-                for (double y = 0; y < windowHeight; y += rectangleAndGapSize) {
-                    for (double x = 0; x < windowWidth; x += rectangleAndGapSize) {
-                        RectangleInfo rectangleInfo = new RectangleInfo();
-                        rectangleInfo.rectangle = new Rectangle(x, y, rectangleSize, rectangleSize);
+                for (double y = 0; y < rectangleAmountY; y++) {
+                    for (double x = 0; x < rectangleAmountX; x++) {
+                        Node rectangleInfo = new Node();
+                        rectangleInfo.rectangle = new Rectangle(x * rectangleAndGapSize, y * rectangleAndGapSize, rectangleSize, rectangleSize);
                         rectangleInfo.setImageViewPosition((int)rectangleInfo.rectangle.getX(), (int)rectangleInfo.rectangle.getY());
-                        if (x > windowHeight / 2 - rectangleAndGapSize)
+                        rectangleInfo.column = (int)x;
+                        rectangleInfo.row = (int)y;
+                        if (x * rectangleAndGapSize > windowHeight / 2 - rectangleAndGapSize)
                             rectangleInfo.rectangle.setFill(Color.WHITE);
                         else
                             rectangleInfo.rectangle.setFill(Color.WHITE);
@@ -174,9 +146,9 @@ public class HelloApplication extends Application {
                 ObstacleGenerator obstacleGenerator = new ObstacleGenerator();
 
                 // Create Obstacles and Treasures
-                int totalStaticObstacle = 20;
+                int totalStaticObstacle = 8;
                 int totalDynamicObstacle = 3;
-                int totalTreasure = 5;
+                int totalTreasure = 2   ;
                 int randomSeason;
                 int randomObstacle;
                 int staticObstaclesSize;
@@ -216,7 +188,7 @@ public class HelloApplication extends Application {
 
 
                 // Set Coordinates of Treasures and Obstacles
-                ArrayList<RectangleInfo> rectanglesInfo = new ArrayList<>();
+                ArrayList<Node> rectanglesInfo = new ArrayList<>();
                 int imageRandomX;
                 int imageRandomY;
                 int imageRectangleIndex;
@@ -347,6 +319,7 @@ public class HelloApplication extends Application {
                         rectanglesInfo.get(i).isPlayerMoved = false;
                         rectanglesInfo.get(i).obstacleType = treasures.get(k).getTreasureType();
                         rectanglesInfo.get(i).treasure = treasures.get(k);
+                        treasures.get(k).nodes.add(rectanglesInfo.get(i));
                     }
 
                     treasures.get(k).imageView.setX(rectanglesInfo.get(0).rectangle.getX());
@@ -368,14 +341,14 @@ public class HelloApplication extends Application {
                     if (rectangleArray.get(locationX + locationY  * rectangleAmountX).isObstaclePlaced){
                         arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
                         arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountX;
-                        arthurMorgan.setFrontDirection(arthurMorgan.getDirection(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
-                        arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
+                        //arthurMorgan.setFrontDirection(arthurMorgan.getDirectionAutonomously(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
+                        //arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
                         isCharacterCreated = true;
                     }
                 }
 
                 // With the tick method, the character is made to move continuously on the screen
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), ec -> {
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1.5), ec -> {
                     try {
                         tick();
                     } catch (FileNotFoundException ex) {
@@ -384,6 +357,13 @@ public class HelloApplication extends Application {
                 }));
                 timeline.setCycleCount(Animation.INDEFINITE);
                 timeline.play();
+
+                Timeline pathFindingTimeLine = new Timeline(new KeyFrame(Duration.millis(1), eu -> {
+                    pathFindingUpdate();
+                }));
+
+                pathFindingTimeLine.setCycleCount(Animation.INDEFINITE);
+                pathFindingTimeLine.play();
 
 
                 // Add Obstacles, Treasures, Rectangles and Character to Screen
@@ -403,7 +383,7 @@ public class HelloApplication extends Application {
 
 
                 // Game screen appears when the button on the main screen is pressed
-                Stage stageGame = (Stage)((Node)e.getSource()).getScene().getWindow();
+                Stage stageGame = (Stage)((javafx.scene.Node)e.getSource()).getScene().getWindow();
                 Scene sceneGame = new Scene(rootGame,windowWidth,windowHeight);
                 sceneGame.setFill(Color.BLACK);
                 stageGame.setTitle("AUTONOMOUS GOLD HUNTER");
@@ -470,14 +450,22 @@ public class HelloApplication extends Application {
     }
 
     public void tick() throws FileNotFoundException {
-        if (screen2Opened) {
+        if (screen2Opened && Character.canMove) {
             arthurMorgan.move(windowWidth, windowHeight, (int) rectangleAndGapSize, rectangleArray);
         }
 
+        System.out.println(arthurMorgan.getIsMovingAutonomously());;
+
         if (!screen2Opened && fogAdd) {
             for (int i = 0; i < rectangleArray.size(); i++) {
-                rootGame.getChildren().add(rectangleArray.get(i).imageView);
+                //rootGame.getChildren().add(rectangleArray.get(i).imageView);
             }
+        }
+    }
+
+    public void pathFindingUpdate() {
+        if (screen2Opened && !arthurMorgan.getIsMovingAutonomously()) {
+            arthurMorgan.aStarPathFinding.search(rectangleArray, rectangleAmountX, rectangleAmountY);
         }
     }
 
