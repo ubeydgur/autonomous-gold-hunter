@@ -4,8 +4,12 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -33,7 +37,7 @@ class RectangleInfo {
     Image image;
 
     RectangleInfo() throws FileNotFoundException {
-        imagePath = new FileInputStream("pictures/fog3.jpeg");
+        imagePath = new FileInputStream("pictures/fog.jpg");
         image = new Image(imagePath);
         imageView = new ImageView(image);
     }
@@ -53,10 +57,11 @@ public class HelloApplication extends Application {
     int characterSizeY = 1;
     int windowHeight = 1000;
     int windowWidth = 1000;
+    boolean screen2Opened = false;
     static double rectangleSize = 9.5;
     static double gapSize = 0.5;
     static double rectangleAndGapSize = rectangleSize + gapSize;
-    ArrayList<RectangleInfo> rectangleArray = new ArrayList<>();
+    public ArrayList<RectangleInfo> rectangleArray = new ArrayList<>();
     public static ArrayList<Treasure> treasures = new ArrayList<>();
     public ArrayList<ArrayList<RectangleInfo>> separatedArea = new ArrayList<>();
 
@@ -68,7 +73,7 @@ public class HelloApplication extends Application {
         System.out.println("Enter Window Width: ");
         windowWidth = scanner.nextInt();*/
 
-        // X and X Coordinates and Total Number of Rectangles
+        // X and Y Coordinates and Total Number of Rectangles
         int rectangleAmountX = windowWidth / (int)rectangleAndGapSize;
         int rectangleAmountY = windowHeight / (int)rectangleAndGapSize;
         int rectangleTotal = rectangleAmountX * rectangleAmountY;
@@ -116,7 +121,6 @@ public class HelloApplication extends Application {
             for (currentY = initialY; currentY < rectangleAreaY; currentY++) {
                 for (currentX = initialX; currentX < rectangleAreaX; currentX++) {
                     separatedArea.get(i).add(rectangleArray.get(currentX + currentY * rectangleAmountX));
-                    //rectangleArray.get(currentX + currentY * rectangleAmountX).rectangle.setFill(Color.BLUE);
                 }
             }
 

@@ -3,7 +3,7 @@ package com.example.prolab2_1;
 import java.io.FileNotFoundException;
 
 public class TreasureGenerator{
-    static Treasure treasure;
+    Treasure treasure;
 
     Treasure goldChest() throws FileNotFoundException {
         return treasure = new Treasure("pictures/gold_chest.png", TreasureType.GOLD);
