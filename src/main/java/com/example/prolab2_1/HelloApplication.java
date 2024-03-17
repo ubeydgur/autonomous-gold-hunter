@@ -433,32 +433,32 @@ public class HelloApplication extends Application {
         };
 
 
-        textFieldHeight.setLayoutX(465);
-        textFieldHeight.setLayoutY(280);
-        textFieldWidth.setLayoutX(465);
-        textFieldWidth.setLayoutY(330);
-        textFieldHeight.setPromptText("ex. 1000 ");
-        textFieldWidth.setPromptText("ex. 1000");
+        textFieldHeight.setLayoutX(450);
+        textFieldHeight.setLayoutY(750);
+        textFieldWidth.setLayoutX(450);
+        textFieldWidth.setLayoutY(800);
+        textFieldHeight.setPromptText("HEIGHT");
+        textFieldWidth.setPromptText("WIDTH");
 
 
-        Text textHeight = new Text("HEIGHT");
-        Text textWidth = new Text("WIDTH");
-        textHeight.setLayoutX(300);
-        textHeight.setLayoutY(300);
-        textWidth.setLayoutX(300);
-        textWidth.setLayoutY(350);
+        Image image = new Image("file:pictures/main_screen.jpeg");
+        ImageView imageView = new ImageView(image);
+        rootMain.getChildren().add(imageView);
 
+        image = new Image("file:pictures/start.jpg");
+        imageView = new ImageView(image);
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(200);
 
-        Button button = new Button("START");
-        button.setMinWidth(150);
-        button.setLayoutX(465);
-        button.setLayoutY(400);
+        Button button = new Button();
+        button.setGraphic(imageView);
+        button.setStyle("  -fx-border-style: none; -fx-border-width: 0; -fx-border-insets:0; -fx-font-size:5px");
+        button.setLayoutX(420);
+        button.setLayoutY(850);
         button.setOnAction(event);
 
         rootMain.getChildren().add(textFieldHeight);
         rootMain.getChildren().add(textFieldWidth);
-        rootMain.getChildren().add(textHeight);
-        rootMain.getChildren().add(textWidth);
         rootMain.getChildren().add(button);
 
 
