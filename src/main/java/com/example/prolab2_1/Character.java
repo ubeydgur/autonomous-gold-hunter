@@ -361,6 +361,7 @@ public class Character {
     }
 
     public static void fillPathDirectionList(ArrayList<Node> path) {
+        pathDirections.clear();
         totalPath = path.size()-1;
         for (int i = path.size()-1; i > 0; i--) {
             if (path.get(i).row == path.get(i-1).row && path.get(i).column < path.get(i-1).column)

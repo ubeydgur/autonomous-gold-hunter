@@ -454,8 +454,6 @@ public class HelloApplication extends Application {
             arthurMorgan.move(windowWidth, windowHeight, (int) rectangleAndGapSize, rectangleArray);
         }
 
-        System.out.println(arthurMorgan.getIsMovingAutonomously());;
-
         if (!screen2Opened && fogAdd) {
             for (int i = 0; i < rectangleArray.size(); i++) {
                 //rootGame.getChildren().add(rectangleArray.get(i).imageView);

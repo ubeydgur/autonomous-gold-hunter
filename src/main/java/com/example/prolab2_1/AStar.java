@@ -1,5 +1,7 @@
 package com.example.prolab2_1;
 
+import javafx.scene.shape.Rectangle;
+
 import java.util.ArrayList;
 
 public class AStar {
@@ -43,6 +45,7 @@ public class AStar {
     }
 
     public void search(ArrayList<Node> rectanglesInfo, int rectangleAmountX, int rectangleAmountY) {
+        System.out.println(goalReached);
         if (!goalReached) {
             Character.canMove = false;
             int column = currentRectangleInfo.column;
@@ -100,7 +103,17 @@ public class AStar {
         }
 
         Character.fillPathDirectionList(path);
+        path.clear();
         Character.canMove = true;
+
+        for (Node n : checkedList){
+            n.setAsOpen(false);
+            n.setAsChecked(false);
+        }
+        for (Node n : openList){
+            n.setAsOpen(false);
+            n.setAsChecked(false);
+        }
     }
 
     public void openRectangleInfo(Node RectangleInfo) {
