@@ -362,33 +362,60 @@ public class HelloApplication extends Application {
         timeline.play();
 
 
-        // Add Obstacles, Treasures, Rectangles and Character to Screen
-        Group myGroup = new Group();
+        // Add Obstacles, Treasures, Rectangles, Fogs and Character to Screen
+        Group rootGame = new Group();
+        Group rootMain = new Group();
 
         for (int i = 0; i < rectangleTotal; i++)
-            myGroup.getChildren().add(rectangleArray.get(i).rectangle);
+            rootGame.getChildren().add(rectangleArray.get(i).rectangle);
 
         for (int i = 0; i < staticObstacles.size(); i++)
-            myGroup.getChildren().add(staticObstacles.get(i).imageView);
+            rootGame.getChildren().add(staticObstacles.get(i).imageView);
 
         for (int i = 0; i < dynamicObstacles.size(); i++)
-            myGroup.getChildren().add(dynamicObstacles.get(i).imageView);
+            rootGame.getChildren().add(dynamicObstacles.get(i).imageView);
 
         for (int i = 0; i < treasures.size(); i++)
-            myGroup.getChildren().add(treasures.get(i).imageView);
+            rootGame.getChildren().add(treasures.get(i).imageView);
 
-        myGroup.getChildren().add(arthurMorgan.imageView);
+        for (int i = 0; i < rectangleArray.size(); i++)
+            rootGame.getChildren().add(rectangleArray.get(i).imageView);
+
+        rootGame.getChildren().add(arthurMorgan.imageView);
 
 
-        Scene scene = new Scene(myGroup,windowWidth,windowHeight);
-        scene.setFill(Color.BLACK);
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                screen2Opened = true;
+                Stage stageGame = (Stage)((Node)e.getSource()).getScene().getWindow();
+                Scene sceneGame = new Scene(rootGame,1000,1000);
+                sceneGame.setFill(Color.BLACK);
+                stageGame.setTitle("AUTONOMOUS GOLD HUNTER");
+                stageGame.setScene(sceneGame);
+                stageGame.show();
+
+            }
+        };
+
+        Button button = new Button("START");
+        button.setMinWidth(150);
+        button.setLayoutX(450);
+        button.setLayoutY(400);
+        button.setOnAction(event);
+
+        rootMain.getChildren().add(button);
+
+        Scene scene = new Scene(rootMain, 1080, 720);
+
         stage.setTitle("AUTONOMOUS GOLD HUNTER");
         stage.setScene(scene);
         stage.show();
     }
 
     public void tick() throws FileNotFoundException {
-        arthurMorgan.move(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray);
+        if (screen2Opened) {
+            arthurMorgan.move(windowWidth, windowHeight, (int) rectangleAndGapSize, rectangleArray);
+        }
     }
 
     int getMinimumRectangleAmount(int rectangleAmountX, int rectangleAmountY)
