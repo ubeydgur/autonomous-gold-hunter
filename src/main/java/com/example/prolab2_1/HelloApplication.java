@@ -146,7 +146,7 @@ public class HelloApplication extends Application {
                 // Create Obstacles and Treasures
                 int totalStaticObstacle = 8;
                 int totalDynamicObstacle = 3;
-                int totalTreasure = 2   ;
+                int totalTreasure = 4;
                 int randomSeason;
                 int randomObstacle;
                 int staticObstaclesSize;
@@ -313,6 +313,7 @@ public class HelloApplication extends Application {
                         rectanglesInfo.get(i).isObstaclePlaced = false;
                         rectanglesInfo.get(i).isPlayerMoved = false;
                         rectanglesInfo.get(i).obstacleType = treasures.get(k).getTreasureType();
+                        rectanglesInfo.get(i).obstacleType = treasures.get(k).getTreasureType();
                         rectanglesInfo.get(i).treasure = treasures.get(k);
                         treasures.get(k).nodes.add(rectanglesInfo.get(i));
                     }
@@ -334,16 +335,16 @@ public class HelloApplication extends Application {
                     locationY = random.nextInt(rectangleAmountY - characterSizeY);
 
                     if (rectangleArray.get(locationX + locationY  * rectangleAmountX).isObstaclePlaced){
-                        arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
+                        arthurMorgan = new Character("pictures/character.jpg", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
                         arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountX;
-                        //arthurMorgan.setFrontDirection(arthurMorgan.getDirectionAutonomously(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
-                        //arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
+                        arthurMorgan.setFrontDirection(arthurMorgan.getDirectionAutonomously(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
+                        arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
                         isCharacterCreated = true;
                     }
                 }
 
                 // With the tick method, the character is made to move continuously on the screen
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1.5), ec -> {
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), ec -> {
                     try {
                         tick();
                     } catch (FileNotFoundException ex) {
@@ -409,11 +410,11 @@ public class HelloApplication extends Application {
         textFieldWidth.setPromptText("WIDTH");
 
 
-        Image image = new Image("file:pictures/main_screen.jpeg");
+        Image image = new Image("file:pictures/main_screen.jpg");
         ImageView imageView = new ImageView(image);
         rootMain.getChildren().add(imageView);
 
-        image = new Image("file:pictures/start.jpg");
+        image = new Image("file:pictures/start_button.jpg");
         imageView = new ImageView(image);
         imageView.setFitHeight(100);
         imageView.setFitWidth(200);
@@ -456,6 +457,7 @@ public class HelloApplication extends Application {
         if (rectangleAmountX < rectangleAmountY) {
             return rectangleAmountX;
         }
+
         return rectangleAmountY;
     }
 
