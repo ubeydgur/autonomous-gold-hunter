@@ -264,7 +264,8 @@ public class Character {
                                 targetTreasure = TreasureType.values()[treasureIndex];
                                 System.out.println(targetTreasure);
                             }
-                            rectanglesInfo.get(index).treasure.updateImage("pictures/" + rectanglesInfo.get(index).treasure.getTreasureType() +".jpg");
+
+                            rectanglesInfo.get(index).treasure.updateImage("pictures/" + rectanglesInfo.get(index).treasure.getTreasureType().name().toLowerCase() +"_chest_open.jpg");
                             System.out.println("This treasure convenient! I am reach :)");
                         }
                         else if (rectanglesInfo.get(index).treasure.getTreasureType() != targetTreasure &&
