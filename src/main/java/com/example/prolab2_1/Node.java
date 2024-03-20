@@ -14,7 +14,6 @@ public class Node {
     boolean isObstaclePlaced = true;
     boolean isPlayerMoved = true;
     boolean isSeen = false;
-    boolean canBeUsedOnPathfinding = true;
     Enum obstacleType;
     Treasure treasure;
     InputStream imagePath;
