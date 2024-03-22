@@ -412,6 +412,8 @@ public class HelloApplication extends Application {
 
         Image image = new Image("file:pictures/main_screen.jpg");
         ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(800);
+        imageView.setFitHeight(800);
         rootMain.getChildren().add(imageView);
 
         image = new Image("file:pictures/start_button.jpg");
@@ -431,7 +433,7 @@ public class HelloApplication extends Application {
         rootMain.getChildren().add(button);
 
 
-        Scene scene = new Scene(rootMain, 1024, 1024);
+        Scene scene = new Scene(rootMain, 800, 800);
 
         stage.setTitle("AUTONOMOUS GOLD HUNTER");
         stage.setScene(scene);
