@@ -76,8 +76,6 @@ public class HelloApplication extends Application {
                         Node rectangleInfo = new Node();
                         rectangleInfo.rectangle = new Rectangle(x * rectangleAndGapSize, y * rectangleAndGapSize, rectangleSize, rectangleSize);
                         rectangleInfo.setImageViewPosition((int)rectangleInfo.rectangle.getX(), (int)rectangleInfo.rectangle.getY());
-                        rectangleInfo.column = (int)x;
-                        rectangleInfo.row = (int)y;
                         if (x * rectangleAndGapSize > windowHeight / 2 - rectangleAndGapSize)
                             rectangleInfo.rectangle.setFill(Color.WHITE);
                         else
@@ -148,7 +146,7 @@ public class HelloApplication extends Application {
                 // Create Obstacles and Treasures
                 int totalStaticObstacle = 8;
                 int totalDynamicObstacle = 3;
-                int totalTreasure = 2   ;
+                int totalTreasure = 4;
                 int randomSeason;
                 int randomObstacle;
                 int staticObstaclesSize;
@@ -236,7 +234,6 @@ public class HelloApplication extends Application {
                     for (int i = 0; i < rectanglesInfo.size(); i++) {
                         rectanglesInfo.get(i).isObstaclePlaced = false;
                         if (staticObstacles.get(k).getObstacleType() == TypeObstacles.TREE ||  staticObstacles.get(k).getObstacleType() == TypeObstacles.MOUNTAIN) {
-                            rectanglesInfo.get(i).isPlayerMoved = false;
                             rectanglesInfo.get(i).obstacleType = staticObstacles.get(k).getObstacleType();
                         }
                     }
@@ -245,7 +242,6 @@ public class HelloApplication extends Application {
                     if (staticObstacles.get(k).getObstacleType() == TypeObstacles.ROCK ||  staticObstacles.get(k).getObstacleType() == TypeObstacles.WALL) {
                         for (int j = 1; j <= staticObstacles.get(k).sizeY; j++) {
                             for (int l = 0; l < staticObstacles.get(k).sizeX; l++) {
-                                rectanglesInfo.get(l + startImageIndex).isPlayerMoved = false;
                                 rectanglesInfo.get(l + startImageIndex).obstacleType = staticObstacles.get(k).getObstacleType();
                             }
                             startImageIndex += staticObstacles.get(k).sizeX + 2;
@@ -283,7 +279,6 @@ public class HelloApplication extends Application {
                     for (int i = 0; i < rectanglesInfo.size(); i++) {
                         rectanglesInfo.get(i).rectangle.setFill(Color.LIGHTPINK);
                         rectanglesInfo.get(i).isObstaclePlaced = false;
-                        rectanglesInfo.get(i).isPlayerMoved = false;
                         rectanglesInfo.get(i).obstacleType = dynamicObstacles.get(k).species;
                     }
 
@@ -318,6 +313,7 @@ public class HelloApplication extends Application {
                         rectanglesInfo.get(i).isObstaclePlaced = false;
                         rectanglesInfo.get(i).isPlayerMoved = false;
                         rectanglesInfo.get(i).obstacleType = treasures.get(k).getTreasureType();
+                        rectanglesInfo.get(i).obstacleType = treasures.get(k).getTreasureType();
                         rectanglesInfo.get(i).treasure = treasures.get(k);
                         treasures.get(k).nodes.add(rectanglesInfo.get(i));
                     }
@@ -339,16 +335,16 @@ public class HelloApplication extends Application {
                     locationY = random.nextInt(rectangleAmountY - characterSizeY);
 
                     if (rectangleArray.get(locationX + locationY  * rectangleAmountX).isObstaclePlaced){
-                        arthurMorgan = new Character("pictures/bee.png", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
+                        arthurMorgan = new Character("pictures/character.jpg", locationX, locationY, characterSizeX, characterSizeY, (int)rectangleAndGapSize, characterMaxStraightWay, characterMinStraightWay);
                         arthurMorgan.currentRectangleIndex = locationX + locationY * rectangleAmountX;
-                        //arthurMorgan.setFrontDirection(arthurMorgan.getDirectionAutonomously(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
-                        //arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
+                        arthurMorgan.setFrontDirection(arthurMorgan.getDirectionAutonomously(windowWidth,windowHeight, (int)rectangleAndGapSize, rectangleArray));
+                        arthurMorgan.setBackDirection(arthurMorgan.getBackDirection());
                         isCharacterCreated = true;
                     }
                 }
 
                 // With the tick method, the character is made to move continuously on the screen
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1.5), ec -> {
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), ec -> {
                     try {
                         tick();
                     } catch (FileNotFoundException ex) {
@@ -357,13 +353,6 @@ public class HelloApplication extends Application {
                 }));
                 timeline.setCycleCount(Animation.INDEFINITE);
                 timeline.play();
-
-                Timeline pathFindingTimeLine = new Timeline(new KeyFrame(Duration.millis(1), eu -> {
-                    pathFindingUpdate();
-                }));
-
-                pathFindingTimeLine.setCycleCount(Animation.INDEFINITE);
-                pathFindingTimeLine.play();
 
 
                 // Add Obstacles, Treasures, Rectangles and Character to Screen
@@ -421,11 +410,13 @@ public class HelloApplication extends Application {
         textFieldWidth.setPromptText("WIDTH");
 
 
-        Image image = new Image("file:pictures/main_screen.jpeg");
+        Image image = new Image("file:pictures/main_screen.jpg");
         ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(800);
+        imageView.setFitHeight(800);
         rootMain.getChildren().add(imageView);
 
-        image = new Image("file:pictures/start.jpg");
+        image = new Image("file:pictures/start_button.jpg");
         imageView = new ImageView(image);
         imageView.setFitHeight(100);
         imageView.setFitWidth(200);
@@ -442,7 +433,7 @@ public class HelloApplication extends Application {
         rootMain.getChildren().add(button);
 
 
-        Scene scene = new Scene(rootMain, 1024, 1024);
+        Scene scene = new Scene(rootMain, 800, 800);
 
         stage.setTitle("AUTONOMOUS GOLD HUNTER");
         stage.setScene(scene);
@@ -450,22 +441,17 @@ public class HelloApplication extends Application {
     }
 
     public void tick() throws FileNotFoundException {
-        if (screen2Opened && Character.canMove) {
+        if (screen2Opened) {
             arthurMorgan.move(windowWidth, windowHeight, (int) rectangleAndGapSize, rectangleArray);
         }
 
         if (!screen2Opened && fogAdd) {
             for (int i = 0; i < rectangleArray.size(); i++) {
-                //rootGame.getChildren().add(rectangleArray.get(i).imageView);
+                rootGame.getChildren().add(rectangleArray.get(i).imageView);
             }
         }
     }
 
-    public void pathFindingUpdate() {
-        if (screen2Opened && !arthurMorgan.getIsMovingAutonomously()) {
-            arthurMorgan.aStarPathFinding.search(rectangleArray, rectangleAmountX, rectangleAmountY);
-        }
-    }
 
     // Returns min screen size
     int getMinimumRectangleAmount(int rectangleAmountX, int rectangleAmountY)
@@ -473,6 +459,7 @@ public class HelloApplication extends Application {
         if (rectangleAmountX < rectangleAmountY) {
             return rectangleAmountX;
         }
+
         return rectangleAmountY;
     }
 
