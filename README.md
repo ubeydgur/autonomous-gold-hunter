@@ -1,4 +1,4 @@
-# Autonomous_Gold_Hunter
+# autonomous-gold-hunter
 
 This project was done with javafx.
 
